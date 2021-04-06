@@ -47,7 +47,6 @@ export default {
       nav_active:false
     }
   }
-
 }
 </script>
 
