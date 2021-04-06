@@ -144,7 +144,7 @@ export default {
         margin: 5px 0 5px;
         text-decoration: none;
         color: $link_font_color;
-        font-size: 1rem;
+        font-size: $hamburger_font_size;
         font-weight: bold;
         font-family: $btn_font_family;
       }
@@ -154,7 +154,7 @@ export default {
     height:50vh;
   }
 
-  @media screen and (max-width:900px){
+  @media screen and (max-width:800px){
   .navi__navbar{
     display: none;
   }
