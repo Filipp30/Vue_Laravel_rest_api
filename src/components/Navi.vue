@@ -8,10 +8,10 @@
 
       <nav class="navi__navbar">
         <router-link to="/" exact>Home</router-link>
-        <router-link to="/" exact>Item_1</router-link>
-        <router-link to="/" exact>Item_2</router-link>
-        <router-link to="/auth" exact>Auth</router-link>
+        <router-link to="/shop" exact>Shop</router-link>
+        <router-link to="/forum" exact>Forum</router-link>
         <router-link to="/contact" exact>Contact</router-link>
+        <router-link to="/auth" exact>Auth</router-link>
         <router-link to="/admin" exact>Admin</router-link>
       </nav>
 
@@ -23,12 +23,12 @@
   </header>
 
   <footer class="phone" v-bind:class="{active:nav_active}" >
-    <nav class="phone__navi">
+    <nav class="phone__navi" v-on:click="nav_active = !nav_active">
       <router-link to="/" exact>Home</router-link>
-      <router-link to="/" exact>Item_1</router-link>
-      <router-link to="/" exact>Item_2</router-link>
-      <router-link to="/auth" exact>Auth</router-link>
+      <router-link to="/shop" exact>Shop</router-link>
+      <router-link to="/forum" exact>Forum</router-link>
       <router-link to="/contact" exact>Contact</router-link>
+      <router-link to="/auth" exact>Auth</router-link>
       <router-link to="/admin" exact>Admin</router-link>
     </nav>
   </footer>
@@ -53,13 +53,14 @@ export default {
 
 <style lang="scss" scoped>
   @import url('https://fonts.googleapis.com/css2?family=New+Tegomin&display=swap');
+  @import "../assets/styles/navi";
   .navi{
     height: 6vh;
     transition: 1s;
     margin: auto;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: #B2BE97;
+    background-color: $background_color;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -93,16 +94,18 @@ export default {
       margin: auto;
       display: flex;
       justify-content: space-evenly;
+
       a{
         text-decoration: none;
-        color: gray;
-        font-size: 1rem;
+        color: $link_font_color;
+        font-size: $btn_font_size;
         font-weight: bold;
+        font-family: $btn_font_family;
         border-bottom-width: 0;
         &:after{
           content: '';
           display: block;
-          border-bottom: 2px solid black;
+          border-bottom: 2px solid $btn_line_color;
           width: 0;
           -webkit-transition: 0.5s ease;
           transition: 0.5s ease;
@@ -113,7 +116,7 @@ export default {
         &:after{
           content: '';
           display: block;
-          border-bottom: 2px solid black;
+          border-bottom: 2px solid $btn_line_color;
           width: 100%;
           -webkit-transition: 0.5s ease;
           transition: 0.5s ease;
@@ -128,17 +131,23 @@ export default {
 
   .phone{
     height: 0vh;
-    background-color: #B2BE97;
+    background-color: $background_color;
     transition: 1s;
     overflow: hidden;
     &__navi{
       height: 100%;
       margin-left: 20px;
-      padding-top: 10px;
-      padding-bottom: 10px;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
+      a{
+        margin: 5px 0 5px;
+        text-decoration: none;
+        color: $link_font_color;
+        font-size: 1rem;
+        font-weight: bold;
+        font-family: $btn_font_family;
+      }
     }
   }
   .active{
@@ -161,16 +170,16 @@ export default {
       height: 4px;
       border-radius: 10px;
       &:nth-child(1) {
-        background: black;
+        background: $hamburger_color;
       }
       &:nth-child(2) {
-        background: black;
+        background: $hamburger_color;
       }
       &:nth-child(3) {
-        background: black;
+        background: $hamburger_color;
       }
     }
   }
-    
+
 }
 </style>
