@@ -67,7 +67,7 @@ export default {
         },
     },
     methods:{
-        onSignSubmit(){
+        onSignSubmit:function(){
             this.check_inputs();
             if (this.input_error.empty_email || this.input_error.empty_password){
                 this.response = 'Fields empty';
@@ -75,7 +75,8 @@ export default {
                 this.response = '';
                 this.spinner = true;
                 axios.post('http://stuworld.space/api/login',this.form).then((response)=>{
-                  console.log(response.data)
+                    // this.$session.start();
+                    // this.$session.set('jwt_user_token', response.data['plainTextToken']);
                     this.spinner = false;
                     this.form.email = '';
                     this.form.password = '';
@@ -86,7 +87,7 @@ export default {
                 })
             }
         },
-        check_inputs(){
+        check_inputs:function(){
             if (this.form.email === ''){
                 this.input_error.empty_email = true;
             }
