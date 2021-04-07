@@ -13,7 +13,7 @@
             </div>
 
             <div class="forgot_form__error">
-<!--                <Spinner v-if="spinner"/>-->
+                <Spinner v-if="spinner"/>
                 <div v-if="response">
                     <h4>{{response}}</h4>
                 </div>
@@ -22,13 +22,15 @@
 </template>
 
 <script>
-// import Spinner from "../Spinner";
+
+import axios from "axios";
+import Spinner from "../Spinner";
 
 export default {
     name: "ForgotForm",
-    // components: {Spinner},
+    components: {Spinner},
     comments:{
-        // Spinner
+        Spinner
     },
     data(){
         return{
@@ -55,22 +57,22 @@ export default {
             }else{
                 this.response = '';
                 this.spinner = true;
-                axios.post('/api/password/email',this.form).then((response)=>{
+                axios.post('http://stuworld.space/api/password/email',this.form).then((response)=>{
                     this.spinner = false;
                     this.form.email = '';
                     this.response =response.data.message;
                 }).catch((error)=>{
                     this.spinner = false;
-                    this.response = error.response.data.errors.email[0];
+                    this.response = error.response.data.message;
                 })
             }
-
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/styles/_app.sass";
     .forgot_form{
         margin: auto;
         width: 300px;
@@ -90,11 +92,9 @@ export default {
             select:-webkit-autofill:focus
             {
                 -webkit-transition-delay: 99999s;
-                -webkit-text-fill-color: black;
+                -webkit-text-fill-color: $font_color;
                 transition-delay: 9999s;
-
             }
-
             width: 300px;
             height:150px;
             display: flex;
@@ -111,8 +111,6 @@ export default {
                 border-bottom: 1px solid black;
                 background-color: transparent;
             }
-
-
         }
         &__btn{
 

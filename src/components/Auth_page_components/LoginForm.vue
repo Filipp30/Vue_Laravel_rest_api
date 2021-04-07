@@ -27,7 +27,6 @@
                 <h4>{{response}}</h4>
             </div>
         </div>
-
     </form>
 
 </template>
@@ -76,7 +75,7 @@ export default {
                 this.response = '';
                 this.spinner = true;
                 axios.post('http://stuworld.space/api/login',this.form).then((response)=>{
-                  console.log(response.data.accessToken)
+                  console.log(response.data)
                     this.spinner = false;
                     this.form.email = '';
                     this.form.password = '';
