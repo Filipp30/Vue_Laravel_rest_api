@@ -30,7 +30,7 @@
         </div>
 
         <div class="reg_form__error">
-<!--            <Spinner v-if="spinner"/>-->
+            <Spinner v-if="spinner"/>
             <div v-if="response">
                 <h4>{{response}}</h4>
             </div>
@@ -40,12 +40,13 @@
 </template>
 
 <script>
-// import Spinner from "../Spinner";
+import Spinner from "../Spinner";
+import axios from "axios";
 export default {
     name: "RegForm",
-    // components: {Spinner},
+    components: {Spinner},
     comments:{
-        // Spinner
+        Spinner
     },
     data(){
         return{
@@ -53,6 +54,7 @@ export default {
                 name:'',
                 email:'',
                 password:'',
+                password_confirmation:''
             },
             spinner:false,
             response:'',
@@ -74,7 +76,7 @@ export default {
     },
     watch:{
         reg_form: { deep:true, handler(){
-                this.input_error.empty_username=false,
+                this.input_error.empty_username=false;
                 this.input_error.empty_email = false;
                 this.input_error.empty_password = false;
                 if (this.response !== 'Registration successfully'){
@@ -89,9 +91,12 @@ export default {
             if (this.input_error.empty_username || this.input_error.empty_email || this.input_error.empty_password){
                 this.response = 'Fields empty';
             }else{
+                this.reg_form.password_confirmation = this.reg_form.password;
                 this.response = '';
                 this.spinner = true;
-                axios.post('/api/register',this.reg_form).then((response)=>{
+                axios.post('http://stuworld.space/api/registration',this.reg_form).then((response)=>{
+                  console.log(response.data.user)
+                  console.log(response.data.token)
                     this.spinner = false;
                     this.response = 'Registration successfully';
                     this.reg_form.name = '';
@@ -99,8 +104,13 @@ export default {
                     this.reg_form.password = '';
                 }).catch((error)=>{
                     this.spinner = false;
-                    this.response = error.response.data.errors.email[0];
-                })
+                  let error_res = '';
+                  for (const [key, value] of Object.entries(error.response.data.errors)) {
+                    // console.log(`${key}: ${value}`);
+                    error_res += value;
+                  }
+                  this.response = error.response.data.message+" "+error_res;
+                });
             }
         },
         check_inputs(){
@@ -119,6 +129,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/styles/_app.sass";
     .reg_form{
         margin: auto;
         width: 300px;
@@ -138,9 +149,8 @@ export default {
             select:-webkit-autofill:focus
             {
                 -webkit-transition-delay: 99999s;
-                -webkit-text-fill-color: black;
+                -webkit-text-fill-color: $font_color;
                 transition-delay: 9999s;
-
             }
 
             width: 300px;
@@ -164,7 +174,6 @@ export default {
         }
 
         &__btn{
-
             width: 300px;
             height:40px;
             display: flex;
@@ -187,7 +196,6 @@ export default {
                 color: black;
             }
         }
-
         &__error{
             align-items: center;
             width: 300px;
