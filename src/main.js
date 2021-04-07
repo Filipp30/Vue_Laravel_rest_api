@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line no-undef
 require('../public/normalize.css');
 
 import { createApp } from "vue";

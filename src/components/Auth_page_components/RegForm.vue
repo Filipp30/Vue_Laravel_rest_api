@@ -106,7 +106,7 @@ export default {
                     this.spinner = false;
                   let error_res = '';
                   for (const [key, value] of Object.entries(error.response.data.errors)) {
-                    // console.log(`${key}: ${value}`);
+                    console.log(`${key}: ${value}`);
                     error_res += value;
                   }
                   this.response = error.response.data.message+" "+error_res;

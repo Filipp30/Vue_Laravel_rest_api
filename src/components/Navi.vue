@@ -1,25 +1,25 @@
 <template>
-
+<div>
   <header class="navi">
-      <aside class="navi__title">
-        <div class="logo"></div>
-        <h5 class="title">Laravel-Vue</h5>
-      </aside>
+    <aside class="navi__title">
+      <div class="logo"></div>
+      <h5 class="title">Laravel-Vue</h5>
+    </aside>
 
-      <nav class="navi__navbar">
-        <router-link to="/" exact>Home</router-link>
-        <router-link to="/shop" exact>Shop</router-link>
-        <router-link to="/forum" exact>Forum</router-link>
-        <router-link to="/contact" exact>Contact</router-link>
-        <router-link to="/auth" exact>Auth</router-link>
-        <router-link to="/admin" exact>Admin</router-link>
-      </nav>
+    <nav class="navi__navbar">
+      <router-link to="/" exact>Home</router-link>
+      <router-link to="/shop" exact>Shop</router-link>
+      <router-link to="/forum" exact>Forum</router-link>
+      <router-link to="/contact" exact>Contact</router-link>
+      <router-link to="/auth" exact>Auth</router-link>
+      <router-link to="/admin" exact>Admin</router-link>
+    </nav>
 
-      <nav class="navi__hamburger" v-on:click="nav_active = !nav_active"  >
-        <div></div>
-        <div></div>
-        <div></div>
-      </nav>
+    <nav class="navi__hamburger" v-on:click="nav_active = !nav_active"  >
+      <div></div>
+      <div></div>
+      <div></div>
+    </nav>
   </header>
 
   <footer class="phone" v-bind:class="{active:nav_active}" >
@@ -32,7 +32,7 @@
       <router-link to="/admin" exact>Admin</router-link>
     </nav>
   </footer>
-
+</div>
 </template>
 
 <script>

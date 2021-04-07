@@ -1,6 +1,9 @@
 <template>
-  <Navi/>
-  <router-view/>
+  <div>
+    <Navi/>
+    <router-view/>
+  </div>
+
 </template>
 
 <script>
