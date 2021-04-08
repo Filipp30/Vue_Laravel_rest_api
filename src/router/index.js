@@ -1,4 +1,6 @@
-import { createRouter, createWebHistory } from "vue-router";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
 import Home from "../views/Home.vue";
 import Shop from "../views/Shop";
 import Forum from "../views/Forum";
@@ -6,8 +8,11 @@ import Contact from "../views/Contact";
 import Auth from "../views/Auth";
 import Admin from "../views/Admin";
 
-const routes = [
 
+
+Vue.use(VueRouter)
+
+const routes = [
   {
     path: "/",
     name: "Home",
@@ -38,12 +43,12 @@ const routes = [
     name: 'Admin',
     component: Admin,
   },
+]
 
-];
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes,
-});
-
-export default router;
+export default router

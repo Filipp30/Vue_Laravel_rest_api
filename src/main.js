@@ -1,9 +1,10 @@
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
 
-// eslint-disable-next-line no-undef
-require('../public/normalize.css');
+Vue.config.productionTip = false
 
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
-
-createApp(App).use(router).mount("#app");
+new Vue({
+  router,
+  render: function (h) { return h(App) }
+}).$mount('#app')
