@@ -95,18 +95,19 @@ export default {
                 this.response = '';
                 this.spinner = true;
                 axios.post('http://stuworld.space/api/registration',this.reg_form).then((response)=>{
-                  console.log(response.data.user)
-                  console.log(response.data.token)
-                    this.spinner = false;
-                    this.response = 'Registration successfully';
-                    this.reg_form.name = '';
-                    this.reg_form.email = '';
-                    this.reg_form.password = '';
+                  // console.log(response.data.user)
+                  this.$session.start();
+                  this.$session.set('jwt_token', response.data.token);
+                  this.spinner = false;
+                  this.response = 'Registration successfully';
+                  this.reg_form.name = '';
+                  this.reg_form.email = '';
+                  this.reg_form.password = '';
                 }).catch((error)=>{
                     this.spinner = false;
                   let error_res = '';
                   for (const [key, value] of Object.entries(error.response.data.errors)) {
-                    console.log(`${key}: ${value}`);
+                    // console.log(`${key}: ${value}`);
                     error_res += value;
                   }
                   this.response = error.response.data.message+" "+error_res;

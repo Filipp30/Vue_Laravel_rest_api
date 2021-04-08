@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import "./assets/styles/normalize.css"
+import VueSession from "vue-session/index.esm";
+
+
+Vue.use(VueSession);
+
 
 Vue.config.productionTip = false
 

@@ -53,8 +53,10 @@ export default {
   methods:{
     get_user: function(){
       this.$session.start()
-      this.$session.set("username", "user123");
-      console.log(this.$session.get("username"));
+      if (this.$session.get('jwt_token')){
+        console.log(this.$session.get('jwt_token'))
+      }
+
     }
 
 
