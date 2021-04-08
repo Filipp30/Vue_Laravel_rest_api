@@ -46,6 +46,17 @@ export default {
       reg_form:false
     }
   },
+  mounted() {
+
+
+  },
+  methods:{
+    get_user: function(){
+      this.$session.start()
+    }
+
+
+  }
 }
 </script>
 
