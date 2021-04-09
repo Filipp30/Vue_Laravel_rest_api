@@ -36,6 +36,7 @@
 import SignForm from "../components/Auth_page_components/LoginForm";
 import RegForm from "../components/Auth_page_components/RegForm";
 import ForgotForm from "../components/Auth_page_components/ForgotForm";
+import axios from "axios";
 export default {
   name: "Auth",
   components: { SignForm,RegForm,ForgotForm},
@@ -47,14 +48,19 @@ export default {
     }
   },
   mounted() {
-    this.get_user();
+    this.get_user_authentication();
 
   },
   methods:{
-    get_user: function(){
+    get_user_authentication: function(){
       this.$session.start()
       if (this.$session.get('jwt_token')){
+        axios.get('http://stuworld.space/api/user',
+          {headers:{"Authorization" : `Bearer ${this.$session.get('jwt_token')}`}})
+        .then(function(response){ console.log(response)});
         console.log(this.$session.get('jwt_token'))
+      }else{
+        console.log('user is not authenticated');
       }
 
     }
