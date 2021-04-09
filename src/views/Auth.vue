@@ -44,29 +44,28 @@ export default {
     return{
       sign_form:true,
       forgot_form:false,
-      reg_form:false
+      reg_form:false,
+
     }
   },
-  mounted() {
+  mounted(){
     this.get_user_authentication();
-
   },
   methods:{
-    get_user_authentication: function(){
-      this.$session.start()
-      if (this.$session.get('jwt_token')){
-        axios.get('http://stuworld.space/api/user',
-          {headers:{"Authorization" : `Bearer ${this.$session.get('jwt_token')}`}})
-        .then(function(response){ console.log(response)});
-        console.log(this.$session.get('jwt_token'))
-      }else{
-        console.log('user is not authenticated');
+      get_user_authentication(){
+        this.$session.start()
+        if (this.$session.get('jwt_token')){
+          axios.get('http://127.0.0.1:8000/api/user', {headers:{
+            "Authorization" : `Bearer ${this.$session.get('jwt_token')}`,
+          }}).then(function(response){
+            console.log(response.data)
+          }).catch(function(error){
+            console.log(error)
+          });
+        }
       }
+  },
 
-    }
-
-
-  }
 }
 </script>
 

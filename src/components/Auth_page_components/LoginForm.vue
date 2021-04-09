@@ -74,7 +74,9 @@ export default {
             }else{
                 this.response = '';
                 this.spinner = true;
-                axios.post('http://stuworld.space/api/login',this.form).then((response)=>{
+                  // http://127.0.0.1:8000/api/login
+                  // http://stuworld.space/api/login
+                axios.post('http://127.0.0.1:8000/api/login',this.form).then((response)=>{
                     this.$session.start();
                     this.$session.set('jwt_token', response.data['plainTextToken']);
                     this.spinner = false;
