@@ -1,4 +1,4 @@
-# vue
+# vue3-rest_api
 
 ## Project setup
 ```
