@@ -1,6 +1,7 @@
 <template>
 
     <form @submit.prevent="onSignSubmit" class="login_form" autocomplete="off">
+
         <div class="login_form__inputs">
             <div>
                 <label for="email">E-Mail</label>
@@ -110,7 +111,6 @@ export default {
         justify-content: space-between;
 
         &__inputs{
-
             input:-webkit-autofill,
             input:-webkit-autofill:hover,
             input:-webkit-autofill:focus,
@@ -186,7 +186,6 @@ export default {
                 cursor: pointer;
             }
         }
-
         &__error{
             align-items: center;
             width: 300px;

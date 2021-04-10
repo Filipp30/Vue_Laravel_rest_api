@@ -1,11 +1,11 @@
 <template>
         <form @submit.prevent="onForgotSubmit"  autocomplete="off" class="forgot_form">
-            <div class="forgot_form__inputs">
 
-                    <label for="email">Enter your mail for reset your password</label>
-                    <input v-model="form.email"
-                           v-bind:style="{'border-bottom':empty_email===true? input_border_red:input_border_black}"
-                           type="email" id="email" placeholder="email">
+            <div class="forgot_form__inputs">
+              <label for="email">Enter your mail for reset your password</label>
+              <input v-model="form.email"
+                     v-bind:style="{'border-bottom':empty_email===true? input_border_red:input_border_black}"
+                     type="email" id="email" placeholder="email">
             </div>
 
             <div class="forgot_form__btn">
@@ -18,6 +18,7 @@
                     <h4>{{response}}</h4>
                 </div>
             </div>
+
         </form>
 </template>
 
@@ -113,7 +114,6 @@ export default {
             }
         }
         &__btn{
-
             width: 300px;
             height:40px;
             display: flex;

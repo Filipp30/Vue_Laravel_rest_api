@@ -26,6 +26,7 @@
           <hr>
           <div>© 2021 Laravel -Vue_Developer.</div>
         </footer>
+
       </div>
 
     </div>
@@ -36,7 +37,7 @@
 import SignForm from "../components/Auth_page_components/LoginForm";
 import RegForm from "../components/Auth_page_components/RegForm";
 import ForgotForm from "../components/Auth_page_components/ForgotForm";
-import axios from "axios";
+
 export default {
   name: "Auth",
   components: { SignForm,RegForm,ForgotForm},
@@ -45,23 +46,7 @@ export default {
       sign_form:true,
       forgot_form:false,
       reg_form:false,
-
     }
-  },
-
-  methods:{
-      get_user_authentication(){
-        // this.$session.start()
-        // if (this.$session.get('jwt_token')){
-        //   axios.get('http://127.0.0.1:8000/api/user', {headers:{
-        //     "Authorization" : `Bearer ${this.$session.get('jwt_token')}`,
-        //   }}).then(function(response){
-        //     console.log(response.data)
-        //   }).catch(function(error){
-        //     console.log(error)
-        //   });
-        // }
-      }
   },
 
 }

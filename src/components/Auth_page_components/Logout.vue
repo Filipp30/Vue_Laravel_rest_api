@@ -22,18 +22,18 @@ export default {
     }
   },
   methods:{
-    log_out:function (){
-      let _this = this;
-      axios.post('http://127.0.0.1:8000/api/logout',
-          {id:this.user.id},
-          {headers:{"Authorization" : `Bearer ${this.$session.get('jwt_token')}`}
-          }).then(function(response){
-            console.log(response.data.message)
-            _this.$router.push('Home');
-      }).catch(function(error){
-        console.log(error)
-      })
-    }
+    // log_out:function (){
+    //   let _this = this;
+    //   axios.post('http://127.0.0.1:8000/api/logout',
+    //       {id:this.user.id},
+    //       {headers:{"Authorization" : `Bearer ${this.$session.get('jwt_token')}`}
+    //       }).then(function(response){
+    //         console.log(response.data.message)
+    //         _this.$router.push('Home');
+    //   }).catch(function(error){
+    //     console.log(error)
+    //   })
+    // }
   }
 
 

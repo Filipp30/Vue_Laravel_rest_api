@@ -114,15 +114,15 @@ export default {
             }
         },
         check_inputs(){
-            if (this.reg_form.name === ''){
-                this.input_error.empty_username = true;
-            }
-            if (this.reg_form.email === ''){
-                this.input_error.empty_email = true;
-            }
-            if (this.reg_form.password === ''){
-                this.input_error.empty_password = true;
-            }
+          if (this.reg_form.name === ''){
+              this.input_error.empty_username = true;
+          }
+          if (this.reg_form.email === ''){
+              this.input_error.empty_email = true;
+          }
+          if (this.reg_form.password === ''){
+              this.input_error.empty_password = true;
+          }
         }
     }
 }
