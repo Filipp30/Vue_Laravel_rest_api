@@ -86,7 +86,7 @@ export default {
         },
     },
     methods:{
-        onRegSubmit(){
+        onRegSubmit:async function(){
             this.check_inputs();
             if (this.input_error.empty_username || this.input_error.empty_email || this.input_error.empty_password){
                 this.response = 'Fields empty';
@@ -94,14 +94,15 @@ export default {
                 this.reg_form.password_confirmation = this.reg_form.password;
                 this.response = '';
                 this.spinner = true;
-                axios.post('http://stuworld.space/api/registration',this.reg_form).then((response)=>{
+                await axios.post('http://stuworld.space/api/registration',this.reg_form).then(response=>{
                   localStorage.setItem('jwt_token',response.data.token);
                   this.spinner = false;
                   this.response = 'Registration successfully';
                   this.reg_form.name = '';
                   this.reg_form.email = '';
                   this.reg_form.password = '';
-                }).catch((error)=>{
+                  this.$router.push('my_account');
+                }).catch(error=>{
                     this.spinner = false;
                   let error_res = '';
                   for (const [key, value] of Object.entries(error.response.data.errors)) {
@@ -112,7 +113,7 @@ export default {
                 });
             }
         },
-        check_inputs(){
+        check_inputs:function(){
           if (this.reg_form.name === ''){
               this.input_error.empty_username = true;
           }

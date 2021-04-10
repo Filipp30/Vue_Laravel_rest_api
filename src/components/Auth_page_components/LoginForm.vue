@@ -57,7 +57,6 @@ export default {
             }
         }
     },
-
     methods:{
         onSignSubmit:async function(){
             this.check_inputs();
@@ -66,15 +65,17 @@ export default {
             }else{
                 this.response = '';
                 this.spinner = true;
-                axios.post('http://127.0.0.1:8000/api/login',this.form).then((response)=>{
-                    localStorage.setItem('jwt_token',response.data['plainTextToken']);
-                    this.spinner = false;
-                    this.form.email = '';
-                    this.form.password = '';
-                    this.response = 'Login successfully';
-                }).catch((error)=>{
-                    this.spinner = false;
-                    this.response = error.response.data.message;
+                await axios.post('http://127.0.0.1:8000/api/login',this.form).then(response=>{
+                  localStorage.setItem('jwt_token',response.data['plainTextToken']);
+                  this.spinner = false;
+                  this.form.email = '';
+                  this.form.password = '';
+                  this.response = 'Login successfully';
+                  this.$router.push('my_account');
+                }).catch(error=>{
+                  console.log(error)
+                  this.spinner = false;
+                  this.response = error.response.data.message;
                 })
             }
         },

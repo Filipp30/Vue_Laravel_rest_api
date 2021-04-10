@@ -6,10 +6,8 @@ import Contact from "../views/Contact";
 import Auth from "../views/Auth";
 import Admin from "../views/Admin";
 import MyAccount from "../views/MyAccount";
+
 const routes = [
-
-
-
   {
     path: "/",
     name: "Home",
@@ -38,7 +36,7 @@ const routes = [
       if (localStorage.getItem('jwt_token')){
         next();
       }else{
-        next({name: 'Home'})
+        next({name: 'Auth'});
       }
     }
   },
@@ -51,7 +49,6 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin,
-
   },
 ]
 

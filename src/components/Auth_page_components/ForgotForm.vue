@@ -52,17 +52,17 @@ export default {
         },
     },
     methods:{
-        onForgotSubmit(){
+        onForgotSubmit:async function(){
             if (this.form.email === ''){
                 this.empty_email = true;
             }else{
                 this.response = '';
                 this.spinner = true;
-                axios.post('http://stuworld.space/api/password/email',this.form).then((response)=>{
+                await axios.post('http://stuworld.space/api/password/email',this.form).then(response=>{
                     this.spinner = false;
                     this.form.email = '';
                     this.response =response.data.message;
-                }).catch((error)=>{
+                }).catch(error=>{
                     this.spinner = false;
                     this.response = error.response.data.message;
                 })

@@ -28,7 +28,7 @@
       <router-link to="/shop" exact>Shop</router-link>
       <router-link to="/forum" exact>Forum</router-link>
       <router-link to="/contact" exact>Contact</router-link>
-      <router-link to="/auth" exact>Auth</router-link>
+      <router-link to="/my_account" exact>My Account</router-link>
       <router-link to="/admin" exact>Admin</router-link>
     </nav>
   </footer>
@@ -46,7 +46,8 @@ export default {
     return{
       nav_active:false
     }
-  }
+  },
+
 }
 </script>
 
