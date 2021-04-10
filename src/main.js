@@ -5,6 +5,7 @@ import "./assets/styles/normalize.css"
 import VueSession from "vue-session/index.esm";
 
 
+
 Vue.use(VueSession);
 
 
@@ -14,3 +15,5 @@ new Vue({
   router,
   render: function (h) { return h(App) }
 }).$mount('#app')
+
+
