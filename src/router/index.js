@@ -5,20 +5,10 @@ import Forum from "../views/Forum";
 import Contact from "../views/Contact";
 import Auth from "../views/Auth";
 import Admin from "../views/Admin";
+import MyAccount from "../views/MyAccount";
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home
-  // },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
+
+
 
   {
     path: "/",
@@ -41,6 +31,18 @@ const routes = [
     component: Contact,
   },
   {
+    path: '/my_account',
+    name: 'MyAccount',
+    component: MyAccount,
+    beforeEnter:(to,from,next)=>{
+      if (localStorage.getItem('jwt_token')){
+        next();
+      }else{
+        next({name: 'Home'})
+      }
+    }
+  },
+  {
     path: '/auth',
     name: 'Auth',
     component: Auth,
@@ -49,9 +51,8 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin,
+
   },
-
-
 ]
 
 const router = createRouter({

@@ -57,18 +57,9 @@ export default {
             }
         }
     },
-    watch:{
-        form: { deep:true, handler(){
-                this.input_error.empty_email = false;
-                this.input_error.empty_password = false;
-                if (this.response !== 'Login successfully'){
-                    this.response = '';
-                }
-            }
-        },
-    },
+
     methods:{
-        onSignSubmit:function(){
+        onSignSubmit:async function(){
             this.check_inputs();
             if (this.input_error.empty_email || this.input_error.empty_password){
                 this.response = 'Fields empty';
@@ -76,8 +67,7 @@ export default {
                 this.response = '';
                 this.spinner = true;
                 axios.post('http://127.0.0.1:8000/api/login',this.form).then((response)=>{
-                    console.log(response.data['plainTextToken'])
-
+                    localStorage.setItem('jwt_token',response.data['plainTextToken']);
                     this.spinner = false;
                     this.form.email = '';
                     this.form.password = '';
@@ -97,6 +87,16 @@ export default {
             }
         }
     },
+    watch:{
+      form: { deep:true, handler(){
+          this.input_error.empty_email = false;
+          this.input_error.empty_password = false;
+          if (this.response !== 'Login successfully'){
+            this.response = '';
+          }
+        }
+      },
+    }
 }
 </script>
 
