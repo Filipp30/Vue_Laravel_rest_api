@@ -18,7 +18,11 @@
 
         <section class="auth__content__form">
           <ForgotForm v-if="forgot_form" />
-          <SignForm v-if="sign_form" v-on:show_forgot_form="forgot_form=true;sign_form= false;reg_form = false;"/>
+          <SignForm v-if="sign_form"
+                    v-on:show_forgot_form="forgot_form=true;
+                    sign_form= false;
+                    reg_form = false;"/>
+
           <RegForm v-if="reg_form"/>
         </section>
 
@@ -26,7 +30,6 @@
           <hr>
           <div>© 2021 Laravel -Vue_Developer.</div>
         </footer>
-
       </div>
 
     </div>
@@ -40,7 +43,12 @@ import ForgotForm from "../components/Auth_page_components/ForgotForm";
 
 export default {
   name: "Auth",
-  components: { SignForm,RegForm,ForgotForm},
+  components:{
+    SignForm,
+    RegForm,
+    ForgotForm
+  },
+
   data(){
     return{
       sign_form:true,
