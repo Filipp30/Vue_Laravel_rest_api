@@ -94,7 +94,7 @@ export default {
                 this.reg_form.password_confirmation = this.reg_form.password;
                 this.response = '';
                 this.spinner = true;
-                await axios.post('http://stuworld.space/api/registration',this.reg_form).then(response=>{
+                await axios.post('http://127.0.0.1:8000/api/registration',this.reg_form).then(response=>{
                   localStorage.setItem('jwt_token',response.data.token);
                   this.spinner = false;
                   this.response = 'Registration successfully';
