@@ -75,8 +75,9 @@ export default {
 
       this.response_from_axios_login_request = '';
       this.show_spinner = true;
-      axios.post('http://127.0.0.1:8000/api/login',this.request_login_form).then(response=>{
+      axios.post('http://127.0.0.1:8000/api/login', this.request_login_form
 
+      ).then(response=>{
         localStorage.setItem('jwt_token',response.data['plainTextToken']);
         this.request_login_form.email = '';
         this.request_login_form.password = '';
@@ -87,6 +88,7 @@ export default {
 
       }).catch(error=>{
         this.response_from_axios_login_request = error.response.data.message;
+
       }).finally(()=>{
         this.show_spinner = false;
       })

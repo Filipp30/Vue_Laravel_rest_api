@@ -1,11 +1,11 @@
 <template>
   <div>
-    <section v-if="auth === false"  class="waiting_authentication">
+    <section v-if="user_authenticated === false"  class="waiting_authentication">
       <Spinner_2 v-if="spinner"/>
       <h3 class="error_auth">{{errors.auth}}</h3>
     </section>
 
-    <section v-if="auth" class="auth_account">
+    <section v-if="user_authenticated" class="auth_account">
       <h1>Welcome <span><h3>{{user.name}}</h3></span></h1>
       <h3>This page is under construction !</h3>
       <button v-on:click="log_out">Log Out</button>
@@ -18,13 +18,19 @@
 import axios from "axios";
 import Spinner from "../components/Spinner";
 import Spinner_2 from "../components/Spinner_2";
+
 export default {
 name: "MyAccount",
-  components:{Spinner,Spinner_2},
+
+  components:{
+    Spinner,
+    Spinner_2
+  },
+
   data(){
     return{
       user:{},
-      auth:false,
+      user_authenticated:false,
       spinner:true,
       errors:{
         auth:''
@@ -33,36 +39,40 @@ name: "MyAccount",
   },
   beforeMount() {
     this.spinner = true;
-    this.get_user();
+    this.get_user_authentication();
   },
   methods:{
-    get_user:async function(){
-      await axios.get('http://127.0.0.1:8000/api/user',
-      {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}})
-      .then(response=>{
-        this.spinner = false;
+    get_user_authentication(){
+      axios.get('http://127.0.0.1:8000/api/user',
+      {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+      }).then(response=>{
         this.user = response.data;
-        this.auth = true;
+        this.user_authenticated = true;
+
       }).catch(err=>{
-        this.spinner = false;
         this.errors.auth = 'Unauthenticated.Please sign in.';
         setTimeout(()=>{
           this.$router.push('Auth');
         },3000);
-      })
+
+      }).finally(()=>{
+        this.spinner = false;
+      });
     },
-    log_out:async function(){
+    log_out(){
        this.spinner = true;
-       await axios.post('http://127.0.0.1:8000/api/logout',
+       axios.post('http://127.0.0.1:8000/api/logout',
       {id:this.user.id},
      {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+
       }).then(response=>{
          console.log(response.data.message)
          localStorage.removeItem('jwt_token');
-         this.$router.push('Auth');
       }).catch(error=>{
+         console.log(error);
+      }).finally(()=>{
          this.$router.push('Auth');
-      })
+      });
     },
   }
 }
