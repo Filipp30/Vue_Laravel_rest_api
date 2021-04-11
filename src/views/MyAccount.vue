@@ -16,14 +16,12 @@
 
 <script>
 import axios from "axios";
-import Spinner from "../components/Spinner";
 import Spinner_2 from "../components/Spinner_2";
 
 export default {
 name: "MyAccount",
 
   components:{
-    Spinner,
     Spinner_2
   },
 
@@ -50,6 +48,7 @@ name: "MyAccount",
         this.user_authenticated = true;
 
       }).catch(err=>{
+        console.log(err);
         this.errors.auth = 'Unauthenticated.Please sign in.';
         setTimeout(()=>{
           this.$router.push('Auth');
