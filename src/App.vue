@@ -3,7 +3,6 @@
     <Navi/>
     <router-view/>
   </div>
-
 </template>
 
 <script>
@@ -14,12 +13,6 @@ export default {
   components: {
     Navi
   },
-
-
 }
 </script>
 
-<style>
-
-
-</style>
