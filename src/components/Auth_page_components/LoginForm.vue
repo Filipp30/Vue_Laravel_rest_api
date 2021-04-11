@@ -124,7 +124,6 @@ export default {
                 -webkit-transition-delay: 99999s;
                 -webkit-text-fill-color: $font_color;
                 transition-delay: 9999s;
-
             }
             width: 300px;
             height:150px;
@@ -136,7 +135,6 @@ export default {
             display: flex;
             justify-content: space-between;
             align-items: center;
-
                 input{
                     outline: none;
                     width: 200px;
