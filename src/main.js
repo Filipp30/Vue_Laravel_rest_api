@@ -5,9 +5,12 @@ import store from "../store"
 import "./assets/styles/normalize.css"
 
 
+
+
 createApp(App)
     .use(router)
     .use(store)
+
     .mount('#app')
 
 
