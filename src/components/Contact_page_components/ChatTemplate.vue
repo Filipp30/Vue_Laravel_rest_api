@@ -10,7 +10,7 @@
     <Spinner v-if="spinner"/>
 
     <section  class="messages" id="mess">
-      <div  v-for="item in messages" v-bind:key="item.name" >
+      <div  v-for="item in messages" v-bind:key="item.name"  >
         <p>{{item.time}} - {{item.name}} :</p>
         <p>{{item.message}}</p>
         <hr>
@@ -32,11 +32,13 @@ import {debounce} from "lodash";
 import Spinner from "../Spinner";
 
 
-
 export default {
     name: "ChatTemplate",
     props:['user'],
-    components:{Spinner},
+    components:{
+      Spinner,
+    },
+
     data(){
         return{
             messages:[],
@@ -66,12 +68,13 @@ export default {
       })
       .bind('NewMessage',(data)=>{
         console.log(data);
-      })
+      });
+
+
 
 
     },
     methods:{
-
 
         get_all_session_chat_messages(){
           localStorage.getItem('chat_session');
@@ -91,6 +94,7 @@ export default {
               {name:'Filipp',time:'16:56:44',message:'Aa oke '},
               {name:'User',time:'16:56:66',message:'Jaja  oke !!!'}];
             this.spinner = false;
+
           },3000)
         },
 
@@ -148,9 +152,9 @@ export default {
         height: 20px;
       }
     }
-    .messages{
+    #mess{
         height: 400px;
-        overflow-y: auto;
+        overflow-y: scroll;
         padding: 1px 10px;
     }
     .messages::-webkit-scrollbar {
