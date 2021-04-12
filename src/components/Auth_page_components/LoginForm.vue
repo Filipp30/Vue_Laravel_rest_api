@@ -51,16 +51,16 @@ export default {
   data(){
     return{
       request_login_form:{
-          email:'',
-          password:''
+        email:'',
+        password:''
       },
       show_spinner:false,
       response_from_axios_login_request:'',
       empty_user_input_error:{
-          empty_email:false,
-          empty_password:false,
-          style_input_border_black:'1px solid black',
-          style_input_border_red:'1px solid red'
+        empty_email:false,
+        empty_password:false,
+        style_input_border_black:'1px solid black',
+        style_input_border_red:'1px solid red'
       }
     }
   },
