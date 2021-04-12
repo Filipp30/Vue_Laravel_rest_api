@@ -75,7 +75,7 @@ export default {
 
       this.response_from_axios_login_request = '';
       this.show_spinner = true;
-      axios.post('http://127.0.0.1:8000/api/login', this.request_login_form
+      axios.post(this.$store.state.axios_request_url+'/api/login', this.request_login_form
 
       ).then(response=>{
         localStorage.setItem('jwt_token',response.data['plainTextToken']);

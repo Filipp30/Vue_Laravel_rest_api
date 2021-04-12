@@ -56,7 +56,7 @@ export default {
       }
       this.response_from_axios_request = '';
       this.show_spinner = true;
-      axios.post('http://stuworld.space/api/password/email',this.request_form).then(response=>{
+      axios.post(this.$store.state.axios_request_url+'/api/password/email',this.request_form).then(response=>{
         this.request_form.email = '';
         this.response_from_axios_request = response.data.message;
       }).catch(error=>{

@@ -8,12 +8,12 @@
     <div class="chat__content">
 
         <div v-if="user_is_authenticated"   class="authenticated">
-          <div v-if="chat_is_connected === false" class="chat_connect">
+          <div v-if="chat_session_exist === false" class="chat_connect">
               <p>Welcome {{user_information.name}}</p>
-              <button v-on:click="get_chat_connection">Connect to Live-Chat</button>
+              <button v-on:click="create_new_chat_session">Connect to Live-Chat</button>
           </div>
 
-          <div v-if="chat_is_connected" class="chat__template">
+          <div v-if="chat_session_exist" class="chat__template">
               <ChatTemplate
                   v-bind:user="user_information"/>
           </div>
@@ -49,8 +49,8 @@ export default {
       unique_chat_session_token:'',
       spinner:false,
       user_is_authenticated:false,
-      chat_is_connected:false,
-      show_redirect_link_if_unauthenticated:false
+      show_redirect_link_if_unauthenticated:false,
+      chat_session_exist:false,
     }
   },
 
@@ -61,12 +61,14 @@ export default {
 
     get_user_authentication(){
       this.spinner = true;
-      axios.get('http://127.0.0.1:8000/api/user',
+      axios.get(this.$store.state.axios_request_url+'/api/user',
           {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
-          }).then(response=>{
+      }).then(response=>{
         this.user_information = response.data;
         this.user_is_authenticated = true;
-
+        if (localStorage.getItem('chat_session')){
+          this.chat_session_exist = true
+        }
       }).catch(err=>{
         console.log(err);
         this.show_redirect_link_if_unauthenticated = true;
@@ -76,10 +78,12 @@ export default {
       });
     },
 
-    get_chat_connection() {
+    create_new_chat_session() {
       this.spinner = true;
       setTimeout(()=>{
-        this.chat_is_connected = true;
+        //request to bqckend en create session
+        localStorage.setItem('chat_session','123456789');
+        this.chat_session_exist = true;
         this.spinner = false;
       },5000);
     }
@@ -120,6 +124,7 @@ export default {
 
   &__content{
     .authenticated{
+     margin-top: 20px;
       .chat_connect{
           @include a_link;
       }

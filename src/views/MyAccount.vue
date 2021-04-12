@@ -41,7 +41,7 @@ name: "MyAccount",
   },
   methods:{
     get_user_authentication(){
-      axios.get('http://127.0.0.1:8000/api/user',
+      axios.get(this.$store.state.axios_request_url+'/api/user',
       {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
       }).then(response=>{
         this.user = response.data;
