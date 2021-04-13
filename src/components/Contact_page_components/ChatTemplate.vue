@@ -32,6 +32,7 @@
 
 import {debounce} from "lodash";
 import Spinner from "../Spinner";
+import axios from "axios";
 
 export default {
     name: "ChatTemplate",
@@ -42,21 +43,19 @@ export default {
 
     },
 
-
     data(){
         return{
             messages:[],
-            chat_session: localStorage.getItem('chat_session'),
+
 
             name_typing:'',
             reset_show_typing_event:debounce(function () {this.name_typing =''}, 1300),
             form:{
                 input_message:'',
                 name: this.user.name,
+                chat_session: localStorage.getItem('chat_session')
             },
             spinner:false,
-
-
 
         }
     },
@@ -107,7 +106,21 @@ export default {
       },
 
       remove_chat_session:function(){
+        this.spinner = true;
 
+        axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
+            {chat_session:localStorage.getItem('chat_session')},
+            {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+          }).then((response)=>{
+            console.log(response)
+            localStorage.removeItem('chat_session')
+            this.form.chat_session = '';
+            this.$router.push({name: 'Home'});
+          }).catch((error)=>{
+            console.log(error)
+          }).finally(()=>{
+            this.spinner = false;
+        });
       }
     },
     watch:{

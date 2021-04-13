@@ -80,13 +80,19 @@ export default {
 
     create_new_chat_session() {
       this.spinner = true;
-      setTimeout(()=>{
-        //request to bqckend en create session
-        localStorage.setItem('chat_session','123456789');
-        this.chat_session_exist = true;
-        this.spinner = false;
-      },5000);
+      axios.get(this.$store.state.axios_request_url+'/api/chat/create_new_chat_session',
+        {headers: {"Authorization": `Bearer ${localStorage.getItem('jwt_token')}`}
+        }).then(response=>{
+          localStorage.setItem('chat_session',response.data);
+          this.chat_session_exist = true;
+        }).catch(error=>{
+          console.log(error)
+        }).finally(()=>{
+          this.spinner = false
+      });
     }
+
+
   },
 }
 </script>
