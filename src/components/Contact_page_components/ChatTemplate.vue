@@ -9,8 +9,8 @@
 
     <Spinner v-if="spinner"/>
 
-    <section  class="messages" id="mess">
-      <div  v-for="item in messages" v-bind:key="item.name"  >
+    <section v-chat-scroll="{ enable: true } " class="messages">
+      <div  v-for="item in messages" v-bind:key="item.name" >
         <p>{{item.time}} - {{item.name}} :</p>
         <p>{{item.message}}</p>
         <hr>
@@ -25,19 +25,23 @@
     <p class="info_bottom">information</p>
 
   </div>
+
 </template>
 
 <script>
+
 import {debounce} from "lodash";
 import Spinner from "../Spinner";
-
 
 export default {
     name: "ChatTemplate",
     props:['user'],
     components:{
       Spinner,
+
+
     },
+
 
     data(){
         return{
@@ -51,6 +55,8 @@ export default {
                 name: this.user.name,
             },
             spinner:false,
+
+
 
         }
     },
@@ -70,47 +76,45 @@ export default {
         console.log(data);
       });
 
-
-
-
     },
+
     methods:{
 
-        get_all_session_chat_messages(){
-          localStorage.getItem('chat_session');
-          //fetch from backend
-          setTimeout(()=>{
-            this.messages = [
-              {name:'Filipp',time:'12:56:12',message:'Hello'},
-              {name:'User',time:'13:59:55',message:'Hey hoeist'},
-              {name:'Filipp',time:'14:12:12',message:'jaj goed en met u'},
-              {name:'User',time:'14:56:44',message:'Ja heel goed wat doe je '},
-              {name:'Filipp',time:'14:56:66',message:'ik programeer nu en je'},
-              {name:'User',time:'14:56:77',message:'ook ik schrijf eindwekr'},
-              {name:'Filipp',time:'15:56:33',message:'JaJa  nice '},
-              {name:'User',time:'15:56:03',message:'heb je al wekr'},
-              {name:'Filipp',time:'15:56:04',message:'Neen nog niet en je ?'},
-              {name:'User',time:'15:56:77',message:'Nee ik moet nog studeren'},
-              {name:'Filipp',time:'16:56:44',message:'Aa oke '},
-              {name:'User',time:'16:56:66',message:'Jaja  oke !!!'}];
-            this.spinner = false;
+      get_all_session_chat_messages(){
+        localStorage.getItem('chat_session');
+        //fetch from backend
+        setTimeout(()=>{
+          this.messages = [
+            {name:'Filipp',time:'12:56:12',message:'Hello'},
+            {name:'User',time:'13:59:55',message:'Hey hoeist'},
+            {name:'Filipp',time:'14:12:12',message:'jaj goed en met u'},
+            {name:'User',time:'14:56:44',message:'Ja heel goed wat doe je '},
+            {name:'Filipp',time:'14:56:66',message:'ik programeer nu en je'},
+            {name:'User',time:'14:56:77',message:'ook ik schrijf eindwekr'},
+            {name:'Filipp',time:'15:56:33',message:'JaJa  nice '},
+            {name:'User',time:'15:56:03',message:'heb je al wekr'},
+            {name:'Filipp',time:'15:56:04',message:'Neen nog niet en je ?'},
+            {name:'User',time:'15:56:77',message:'Nee ik moet nog studeren'},
+            {name:'Filipp',time:'16:56:44',message:'Aa oke '},
+            {name:'User',time:'16:56:66',message:'Jaja  oke !!!'}];
+          this.spinner = false;
 
-          },3000)
-        },
+        },3000)
+      },
 
-        post_message:function(){
+      post_message:function(){
 
-        },
+      },
 
-        remove_chat_session:function(){
+      remove_chat_session:function(){
 
-        }
+      }
     },
     watch:{
-        'form.input_message': function(){
-            console.log(this.user.name+"---"+this.chat_session+'--is typing')
-          this.$store.state.my_channel.trigger('client-user_typing',{name:this.user.name,chat_session:this.chat_session});
-        },
+      'form.input_message': function(){
+          console.log(this.user.name+"---"+this.chat_session+'--is typing')
+        this.$store.state.my_channel.trigger('client-user_typing',{name:this.user.name,chat_session:this.chat_session});
+      },
     },
 
 }
@@ -152,20 +156,20 @@ export default {
         height: 20px;
       }
     }
-    #mess{
+    .messages{
         height: 400px;
-        overflow-y: scroll;
+        overflow-y: auto;
         padding: 1px 10px;
     }
-    .messages::-webkit-scrollbar {
-        width: 6px;
-    }
-    .messages::-webkit-scrollbar-track {
-        background: #ddd;
-    }
-    .messages::-webkit-scrollbar-thumb {
-        background: #bdbdbd;
-    }
+    //.messages::-webkit-scrollbar {
+    //    width: 6px;
+    //}
+    //.messages::-webkit-scrollbar-track {
+    //    background: #ddd;
+    //}
+    //.messages::-webkit-scrollbar-thumb {
+    //    background: #bdbdbd;
+    //}
 
     .inp_form {
         border-top: 1px solid #1a202c;
