@@ -9,9 +9,9 @@
 
     <Spinner v-if="spinner"/>
 
-    <section v-chat-scroll="{ enable: true } " class="messages">
-      <div  v-for="item in messages" v-bind:key="item.name" >
-        <p>{{item.time}} - {{item.name}} :</p>
+    <section class="messages">
+      <div  v-for="item in messages" v-bind:key="item.id" >
+        <p>{{item.created_at}} - {{item.user.name}} :</p>
         <p>{{item.message}}</p>
         <hr>
       </div>
@@ -22,7 +22,7 @@
         <button type="submit" class="btn">Send</button>
     </form>
 
-    <p class="info_bottom">information</p>
+    <p class="info_bottom">{{information_status_field_chat_template}}</p>
 
   </div>
 
@@ -33,6 +33,7 @@
 import {debounce} from "lodash";
 import Spinner from "../Spinner";
 import axios from "axios";
+import Pusher from "pusher-js";
 
 export default {
     name: "ChatTemplate",
@@ -46,8 +47,6 @@ export default {
     data(){
         return{
             messages:[],
-
-
             name_typing:'',
             reset_show_typing_event:debounce(function () {this.name_typing =''}, 1300),
             form:{
@@ -56,58 +55,85 @@ export default {
                 chat_session: localStorage.getItem('chat_session')
             },
             spinner:false,
-
+            information_status_field_chat_template:'',
+            channel:''
         }
     },
     mounted() {
       this.spinner = true;
       this.get_all_session_chat_messages();
 
-
       //Chat Event Listeners / Handlers
-      this.$store.state.my_channel
-      .bind('user_typing',(data)=>{
-        this.name_typing = data;
-        this.reset_show_typing_event();
+      this.channel = new Pusher('8a34625906a44e573ba7',{
+        useTLS: true,
+        forceTLS: true,
+        encrypted: true,
+        cluster: "eu",
+        authTransport:'ajax',
+        authEndpoint: 'http://127.0.0.1:8000/api/pusher/auth',
+        auth:{
+          headers:{
+              Authorization:`Bearer ${localStorage.getItem('jwt_token')}`
+          }
+        }
+      }).subscribe('private-my-channel');
+
+      this.channel.bind('client-user_typing',(data)=>{
+        // this.name_typing = data;
+        // this.reset_show_typing_event();
         console.log(data);
       })
       .bind('NewMessage',(data)=>{
-        console.log(data);
+        console.log(data)
+        if (data.session === localStorage.getItem('chat_session')){
+          this.addChatMessageFromEventListenerToLocalArray(data);
+        }
       });
+
 
     },
 
     methods:{
 
-      get_all_session_chat_messages(){
+      get_all_session_chat_messages() {
         localStorage.getItem('chat_session');
-        //fetch from backend
-        setTimeout(()=>{
-          this.messages = [
-            {name:'Filipp',time:'12:56:12',message:'Hello'},
-            {name:'User',time:'13:59:55',message:'Hey hoeist'},
-            {name:'Filipp',time:'14:12:12',message:'jaj goed en met u'},
-            {name:'User',time:'14:56:44',message:'Ja heel goed wat doe je '},
-            {name:'Filipp',time:'14:56:66',message:'ik programeer nu en je'},
-            {name:'User',time:'14:56:77',message:'ook ik schrijf eindwekr'},
-            {name:'Filipp',time:'15:56:33',message:'JaJa  nice '},
-            {name:'User',time:'15:56:03',message:'heb je al wekr'},
-            {name:'Filipp',time:'15:56:04',message:'Neen nog niet en je ?'},
-            {name:'User',time:'15:56:77',message:'Nee ik moet nog studeren'},
-            {name:'Filipp',time:'16:56:44',message:'Aa oke '},
-            {name:'User',time:'16:56:66',message:'Jaja  oke !!!'}];
-          this.spinner = false;
-
-        },3000)
+        axios.get(this.$store.state.axios_request_url+'/api/chat/get_chat_session_messages',
+            {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`},
+              params:{chat_session:localStorage.getItem('chat_session')}
+        }).then(response=>{
+          this.messages = response.data
+          console.log(this.messages)
+        }).catch(error=>{
+          console.log(error)
+        }).finally(()=>{
+          this.spinner = false
+        })
       },
 
-      post_message:function(){
+      post_message(){
+        this.information_status_field_chat_template = 'shipment...';
+        axios.post(this.$store.state.axios_request_url+'/api/chat/add_message',
+            this.form,
+            {
+              headers: {"Authorization": `Bearer ${localStorage.getItem('jwt_token')}`}
+        }).then((response)=>{
+          this.form.input_message='';
+          this.information_status_field_chat_template = response.data.message;
+        }).catch((error)=>{
+          this.information_status_field_chat_template = error;
+        }).finally(()=>{
+          setTimeout(()=>{
+            this.information_status_field_chat_template = '';
+          },1500)
+        })
+      },
 
+      addChatMessageFromEventListenerToLocalArray(data){
+        this.messages.push(data);
       },
 
       remove_chat_session:function(){
         this.spinner = true;
-
         axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
             {chat_session:localStorage.getItem('chat_session')},
             {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
@@ -125,8 +151,7 @@ export default {
     },
     watch:{
       'form.input_message': function(){
-          console.log(this.user.name+"---"+this.chat_session+'--is typing')
-        this.$store.state.my_channel.trigger('client-user_typing',{name:this.user.name,chat_session:this.chat_session});
+        this.channel.trigger('client-user_typing',{name:this.user.name,chat_session:this.chat_session});
       },
     },
 

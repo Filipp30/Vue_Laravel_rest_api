@@ -69,6 +69,7 @@ export default {
         if (localStorage.getItem('chat_session')){
           this.chat_session_exist = true
         }
+        this.chat_session_exist = false;
       }).catch(err=>{
         console.log(err);
         this.show_redirect_link_if_unauthenticated = true;

@@ -11,6 +11,7 @@ createApp(App)
     .use(router)
     .use(store)
     .use(VueChatScroll)
+
     .mount('#app')
 
 
