@@ -63,13 +63,14 @@ export default {
       this.spinner = true;
       this.get_all_session_chat_messages();
 
+
       //Chat Event Listeners / Handlers
+      Pusher.logToConsole = false;
       this.channel = new Pusher('8a34625906a44e573ba7',{
         useTLS: true,
         forceTLS: true,
         encrypted: true,
         cluster: "eu",
-        authTransport:'ajax',
         authEndpoint: 'http://127.0.0.1:8000/api/pusher/auth',
         auth:{
           headers:{
@@ -79,15 +80,19 @@ export default {
       }).subscribe('private-my-channel');
 
       this.channel.bind('client-user_typing',(data)=>{
-        // this.name_typing = data;
-        // this.reset_show_typing_event();
-        console.log(data);
-      })
-      .bind('NewMessage',(data)=>{
-        console.log(data)
-        if (data.session === localStorage.getItem('chat_session')){
-          this.addChatMessageFromEventListenerToLocalArray(data);
+        if (data.session === this.form.chat_session){
+          this.name_typing = data.name;
+          this.reset_show_typing_event();
         }
+      });
+
+      this.channel.bind('pusher:subscription_succeeded', function() {
+
+      }).bind('App\\Events\\NewMessage',(data)=>{
+        console.log(data)
+        // if (data.session === localStorage.getItem('chat_session')){
+        //   this.addChatMessageFromEventListenerToLocalArray(data);
+        // }
       });
 
 
@@ -101,8 +106,9 @@ export default {
             {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`},
               params:{chat_session:localStorage.getItem('chat_session')}
         }).then(response=>{
+          console.log(response)
+          console.log(response.data)
           this.messages = response.data
-          console.log(this.messages)
         }).catch(error=>{
           console.log(error)
         }).finally(()=>{
@@ -132,7 +138,7 @@ export default {
         this.messages.push(data);
       },
 
-      remove_chat_session:function(){
+      remove_chat_session(){
         this.spinner = true;
         axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
             {chat_session:localStorage.getItem('chat_session')},
@@ -151,7 +157,7 @@ export default {
     },
     watch:{
       'form.input_message': function(){
-        this.channel.trigger('client-user_typing',{name:this.user.name,chat_session:this.chat_session});
+        this.channel.trigger('client-user_typing',{name:this.user.name,session:this.form.chat_session});
       },
     },
 
