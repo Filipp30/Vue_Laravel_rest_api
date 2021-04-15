@@ -16,25 +16,32 @@
       <button v-on:click="log_out">Log Out</button>
       <Spinner_2 v-if="spinner"/>
     </section>
+
+    <section>
+      <ChatWaitingList/>
+    </section>
+
+
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import Spinner_2 from "../components/Spinner_2";
-
+import ChatWaitingList from "../components/Admin_chat_components/ChatWaitingList";
 
 export default {
   name: "Admin",
   components:{
-    Spinner_2
+    Spinner_2,
+    ChatWaitingList
   },
 
   data(){
     return{
       user:{},
       user_authenticated:false,
-      spinner:true,
+      spinner:false,
       errors:{
         auth:''
       }
