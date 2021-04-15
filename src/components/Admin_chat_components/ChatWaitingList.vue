@@ -1,7 +1,7 @@
 <template>
   <section class="list">
     <div v-for="item in chat_session_list" v-bind:key="item.id" class="list__item">
-        <WaitingList_Item v-bind:item="item"/>
+        <WaitingList_Item v-bind:item="item" v-on:on_chat_session_clicked="on_chat_session_clicked"/>
     </div>
   </section>
 </template>
@@ -39,6 +39,10 @@ export default {
       }).finally(()=>{
         console.log('fimnish');
       });
+    },
+
+    on_chat_session_clicked(session){
+      console.log(session+' From List ');
     }
   }
 
