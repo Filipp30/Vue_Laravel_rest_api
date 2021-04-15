@@ -78,14 +78,17 @@ export default {
       axios.post(this.$store.state.axios_request_url+'/api/login', this.request_login_form
 
       ).then(response=>{
-        localStorage.setItem('jwt_token',response.data['plainTextToken']);
+        localStorage.setItem('jwt_token',response.data['jwt_token']['plainTextToken']);
         this.request_login_form.email = '';
         this.request_login_form.password = '';
         this.response_from_axios_login_request = 'Login successfully';
         setTimeout(()=>{
-          this.$router.push('my_account');
-        },2000);
-
+          if (response.data['isAdmin']){
+            this.$router.push('admin');
+          }else{
+            this.$router.push('my_account');
+          }
+        },1500);
       }).catch(error=>{
         this.response_from_axios_login_request = error.response.data.message;
 

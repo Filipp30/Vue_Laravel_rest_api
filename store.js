@@ -18,9 +18,6 @@ const store = createStore({
             }
         }).subscribe('private-my-channel'),
 
-
-
-
     },
     mutations:{
 

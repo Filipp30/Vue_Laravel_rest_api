@@ -78,7 +78,6 @@ export default {
       });
     },
 
-
     methods:{
 
       get_all_session_chat_messages() {

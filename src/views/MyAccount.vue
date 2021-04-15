@@ -45,14 +45,16 @@ name: "MyAccount",
       {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
       }).then(response=>{
         this.user = response.data;
+        if (response.data['isAdmin']){
+          this.$router.push('admin');
+        }
         this.user_authenticated = true;
-
       }).catch(err=>{
         console.log(err);
         this.errors.auth = 'Unauthenticated.Please sign in.';
         setTimeout(()=>{
           this.$router.push('Auth');
-        },3000);
+        },1500);
 
       }).finally(()=>{
         this.spinner = false;

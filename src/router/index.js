@@ -49,6 +49,13 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin,
+    beforeEnter:(to,from,next)=>{
+      if (localStorage.getItem('jwt_token')){
+        next();
+      }else{
+        next({name: 'Auth'});
+      }
+    }
   },
 ]
 
