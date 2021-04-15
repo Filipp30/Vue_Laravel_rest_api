@@ -18,7 +18,7 @@
     </section>
 
     <section>
-      <ChatWaitingList/>
+      <Chat/>
     </section>
 
 
@@ -28,13 +28,14 @@
 <script>
 import axios from "axios";
 import Spinner_2 from "../components/Spinner_2";
-import ChatWaitingList from "../components/Admin_chat_components/ChatWaitingList";
+import Chat from "../components/Admin_chat_components/Chat";
+
 
 export default {
   name: "Admin",
   components:{
     Spinner_2,
-    ChatWaitingList
+    Chat
   },
 
   data(){
@@ -88,6 +89,8 @@ export default {
         this.$router.push('Auth');
       });
     },
+
+
   }
 }
 </script>

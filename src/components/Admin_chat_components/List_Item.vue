@@ -1,5 +1,5 @@
 <template>
-  <div v-on:click="$emit('on_chat_session_clicked',item.session)" class="item">
+  <div v-on:click="on_chat_session_clicked" class="item">
 
     <header class="item__userInformation">
       <ul>
@@ -11,7 +11,6 @@
     </header>
 
     <footer class="item__listener">
-
         <div class="new_message_active">
           <p v-if="show_new_message_exist">new message</p>
         </div>
@@ -19,11 +18,6 @@
         <div class="typing_active">
           <p v-if="show_typing_active">typing...</p>
         </div>
-
-        <div class="treatment_active">
-          <p v-if="show_user_treatment_active">in treatment</p>
-        </div>
-
     </footer>
 
   </div>
@@ -42,8 +36,6 @@ export default {
     return{
       show_new_message_exist: false,
       show_typing_active: false,
-      show_user_treatment_active:false,
-
       reset_show_typing_event:debounce(function () {this.show_typing_active = false}, 1500),
       channel:this.$store.state.contact_chat_channel,
     }
@@ -67,6 +59,9 @@ export default {
 
   methods:{
 
+    on_chat_session_clicked(){
+      this.show_new_message_exist = false;
+    }
   }
 
 }
@@ -74,10 +69,8 @@ export default {
 
 <style lang="scss" scoped>
   .item{
-    border: 1px solid black;
-    border-radius: 5px;
     background-color: #dddddd;
-    width: 400px;
+    width:350px;
 
     &__userInformation{
       font-size:17px;
@@ -95,7 +88,6 @@ export default {
         border-radius: 5px;
         width: 100px;
         height: 25px;
-
         font-size:17px;
         font-weight: bold;
         display: flex;

@@ -1,26 +1,25 @@
 <template>
   <section class="list">
     <div v-for="item in chat_session_list" v-bind:key="item.id" class="list__item">
-        <WaitingList_Item v-bind:item="item" v-on:on_chat_session_clicked="on_chat_session_clicked"/>
+        <List_Item v-bind:item="item" v-on:click="$emit('on_chat_session_clicked',item.session)"/>
     </div>
   </section>
 </template>
 
 <script>
 import axios from "axios";
-import WaitingList_Item from "./WaitingList_Item";
+import List_Item from "./List_Item";
+
 export default {
   name: "ChatWaitingList",
 
   components:{
-    WaitingList_Item
+    List_Item
   },
 
   data(){
     return{
-
       chat_session_list:[]
-
     }
   },
 
@@ -40,10 +39,6 @@ export default {
         console.log('fimnish');
       });
     },
-
-    on_chat_session_clicked(session){
-      console.log(session+' From List ');
-    }
   }
 
 
@@ -52,11 +47,19 @@ export default {
 
 <style lang="scss" scoped>
   .list{
-    margin: auto;
     border: 1px solid red;
-    background-color: #bdbdbd;
-    width: 500px;
+    width: 350px;
     height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: scroll;
+
+    &__item{
+
+    }
+
+
   }
 
 
