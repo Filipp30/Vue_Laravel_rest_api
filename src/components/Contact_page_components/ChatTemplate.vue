@@ -38,10 +38,9 @@ import Pusher from "pusher-js";
 export default {
     name: "ChatTemplate",
     props:['user'],
+
     components:{
       Spinner,
-
-
     },
 
     data(){
@@ -49,68 +48,49 @@ export default {
             messages:[],
             name_typing:'',
             reset_show_typing_event:debounce(function () {this.name_typing =''}, 1300),
+            spinner:false,
+            information_status_field_chat_template:'',
+            channel:this.$store.state.contact_chat_channel,
+
             form:{
                 input_message:'',
                 name: this.user.name,
                 chat_session: localStorage.getItem('chat_session')
             },
-            spinner:false,
-            information_status_field_chat_template:'',
-            channel:''
         }
     },
-    mounted() {
-      this.spinner = true;
-      this.get_all_session_chat_messages();
 
+    mounted() {
+      this.get_all_session_chat_messages();
 
       //Chat Event Listeners / Handlers
       Pusher.logToConsole = false;
-      this.channel = new Pusher('8a34625906a44e573ba7',{
-        useTLS: true,
-        forceTLS: true,
-        encrypted: true,
-        cluster: "eu",
-        authEndpoint: 'http://127.0.0.1:8000/api/pusher/auth',
-        auth:{
-          headers:{
-              Authorization:`Bearer ${localStorage.getItem('jwt_token')}`
-          }
+      this.channel.bind('pusher:subscription_succeeded', function() {
+      }).bind('App\\Events\\NewMessage',(data)=>{
+        if (data.session === localStorage.getItem('chat_session')){
+          this.addChatMessageFromEventListenerToLocalArray(data);
         }
-      }).subscribe('private-my-channel');
-
-      this.channel.bind('client-user_typing',(data)=>{
+      }).bind('client-user_typing',(data)=>{
         if (data.session === this.form.chat_session){
           this.name_typing = data.name;
           this.reset_show_typing_event();
         }
       });
-
-      this.channel.bind('pusher:subscription_succeeded', function() {
-
-      }).bind('App\\Events\\NewMessage',(data)=>{
-        console.log(data)
-        // if (data.session === localStorage.getItem('chat_session')){
-        //   this.addChatMessageFromEventListenerToLocalArray(data);
-        // }
-      });
-
-
     },
+
 
     methods:{
 
       get_all_session_chat_messages() {
+        this.spinner = true;
         localStorage.getItem('chat_session');
         axios.get(this.$store.state.axios_request_url+'/api/chat/get_chat_session_messages',
             {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`},
               params:{chat_session:localStorage.getItem('chat_session')}
         }).then(response=>{
-          console.log(response)
-          console.log(response.data)
           this.messages = response.data
         }).catch(error=>{
-          console.log(error)
+          this.information_status_field_chat_template = error;
         }).finally(()=>{
           this.spinner = false
         })
@@ -119,8 +99,7 @@ export default {
       post_message(){
         this.information_status_field_chat_template = 'shipment...';
         axios.post(this.$store.state.axios_request_url+'/api/chat/add_message',
-            this.form,
-            {
+            this.form, {
               headers: {"Authorization": `Bearer ${localStorage.getItem('jwt_token')}`}
         }).then((response)=>{
           this.form.input_message='';
@@ -143,18 +122,18 @@ export default {
         axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
             {chat_session:localStorage.getItem('chat_session')},
             {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
-          }).then((response)=>{
-            console.log(response)
+          }).then(()=>{
             localStorage.removeItem('chat_session')
             this.form.chat_session = '';
             this.$router.push({name: 'Home'});
           }).catch((error)=>{
-            console.log(error)
+          this.information_status_field_chat_template = error;
           }).finally(()=>{
             this.spinner = false;
         });
       }
     },
+
     watch:{
       'form.input_message': function(){
         this.channel.trigger('client-user_typing',{name:this.user.name,session:this.form.chat_session});
