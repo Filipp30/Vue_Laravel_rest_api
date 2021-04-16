@@ -36,8 +36,8 @@ export default {
     this.channel.bind('App\\Events\\NewChatSessionCreated',data=>{
       this.add_session_to_local_wait_list(data);
     });
-    this.channel.bind('App\\Events\\ChatSessionRemoved',function(data){
-      console.log(data)
+    this.channel.bind('App\\Events\\ChatSessionRemoved',data=>{
+      this.remove_session_from_local_wait_list(data)
     });
 
   },
@@ -61,9 +61,9 @@ export default {
       this.chat_session_list.push(data.session);
     },
 
-    remove_session_from_local_wait_list:function(session){
+    remove_session_from_local_wait_list:function(data){
       for( let i = 0; i < this.chat_session_list.length; i++){
-        if ( this.chat_session_list[i].session === session) {
+        if ( parseInt(this.chat_session_list[i].session) === parseInt(data.session)) {
           this.chat_session_list.splice(i, 1);
         }
       }
