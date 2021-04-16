@@ -18,7 +18,7 @@
     </section>
 
     <section>
-      <Chat/>
+      <Chat v-bind:user="user" />
     </section>
 
 

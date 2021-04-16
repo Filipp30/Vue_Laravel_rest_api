@@ -64,14 +64,15 @@ export default {
       this.get_all_session_chat_messages();
 
       //Chat Event Listeners / Handlers
-      Pusher.logToConsole = false;
+      Pusher.logToConsole = true;
       this.channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=>{
-        if (data.session === localStorage.getItem('chat_session')){
+        console.log(typeof data.session)
+        if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))){
           this.addChatMessageFromEventListenerToLocalArray(data);
         }
       }).bind('client-user_typing',(data)=>{
-        if (data.session === this.form.chat_session){
+        if (data.session === parseInt(this.form.chat_session)){
           this.name_typing = data.name;
           this.reset_show_typing_event();
         }
@@ -82,7 +83,6 @@ export default {
 
       get_all_session_chat_messages() {
         this.spinner = true;
-        localStorage.getItem('chat_session');
         axios.get(this.$store.state.axios_request_url+'/api/chat/get_chat_session_messages',
             {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`},
               params:{chat_session:localStorage.getItem('chat_session')}
@@ -226,9 +226,6 @@ export default {
         font-size: 15px;
         height: 0px;
     }
-
-
-
 
 }
 </style>

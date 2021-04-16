@@ -45,6 +45,8 @@ import Pusher from "pusher-js";
 export default {
   name: "Chat",
 
+  props:['user'],
+
   components:{
     ChatWaitingList,
     Spinner,
@@ -62,22 +64,21 @@ export default {
       form:{
         input_message:'',
         name: '',
-        chat_session: localStorage.getItem('chat_session')
+        chat_session:''
       },
     }
   },
 
   mounted() {
 
-
-    Pusher.logToConsole = false;
+    Pusher.logToConsole = true;
     this.channel.bind('pusher:subscription_succeeded', function() {
     }).bind('App\\Events\\NewMessage',(data)=>{
-      if (data.session === localStorage.getItem('chat_session')){
+      if (parseInt(data.session) === parseInt(this.form.chat_session)){
         this.addChatMessageFromEventListenerToLocalArray(data);
       }
     }).bind('client-user_typing',(data)=>{
-      if (data.session === this.form.chat_session){
+      if (parseInt(data.session) === this.form.chat_session){
         this.name_typing = data.name;
         this.reset_show_typing_event();
       }
@@ -86,9 +87,22 @@ export default {
 
 
   methods:{
+
     on_chat_session_clicked(session){
-      console.log(session+' From List Admin Chat Page ');
+      this.form.chat_session = session;
+      this.spinner = true;
+      axios.get(this.$store.state.axios_request_url+'/api/chat/get_chat_session_messages',
+          {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`},
+            params:{chat_session:session}
+          }).then(response=>{
+        this.messages = response.data
+      }).catch(error=>{
+        this.information_status_field_chat_template = error;
+      }).finally(()=>{
+        this.spinner = false
+      })
     },
+
     post_message() {
       this.information_status_field_chat_template = 'shipment...';
       axios.post(this.$store.state.axios_request_url + '/api/chat/add_message',
@@ -170,7 +184,7 @@ export default {
       }
       .messages{
         height: 400px;
-        overflow-y: auto;
+        overflow-y: scroll;
         padding: 1px 10px;
       }
       //.messages::-webkit-scrollbar {
