@@ -71,7 +71,7 @@ export default {
   methods:{
     on_mail_send_submit(){
       this.show_spinner = true;
-      axios.post('http://127.0.0.1:8000/api/contact/email',this.email_data_form
+      axios.post(this.$store.state.axios_request_url+'/api/contact/email',this.email_data_form
       ).then((response)=>{
         this.response_from_mail_request = response.data.message;
         this.reset_email_form();

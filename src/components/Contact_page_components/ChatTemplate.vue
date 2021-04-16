@@ -44,27 +44,27 @@ export default {
     },
 
     data(){
-        return{
-            messages:[],
-            name_typing:'',
-            reset_show_typing_event:debounce(function () {this.name_typing =''}, 1300),
-            spinner:false,
-            information_status_field_chat_template:'',
-            channel:this.$store.state.contact_chat_channel,
+      return{
+        messages:[],
+        name_typing:'',
+        reset_show_typing_event:debounce(function () {this.name_typing =''}, 1300),
+        spinner:false,
+        information_status_field_chat_template:'',
+        channel:this.$store.state.contact_chat_channel,
 
-            form:{
-                input_message:'',
-                name: this.user.name,
-                chat_session: localStorage.getItem('chat_session')
-            },
-        }
+        form:{
+            input_message:'',
+            name: this.user.name,
+            chat_session: localStorage.getItem('chat_session')
+        },
+      }
     },
 
     mounted() {
       this.get_all_session_chat_messages();
 
       //Chat Event Listeners / Handlers
-      Pusher.logToConsole = true;
+      Pusher.logToConsole = false;
       this.channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=>{
         console.log(typeof data.session)
@@ -73,7 +73,7 @@ export default {
         }
       }).bind('client-user_typing',(data)=>{
         if (data.session === parseInt(this.form.chat_session)){
-          this.name_typing = data.name;
+          this.name_typing = data.name+' typing...';
           this.reset_show_typing_event();
         }
       });

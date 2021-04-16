@@ -30,9 +30,11 @@ name: "MyAccount",
       user:{},
       user_authenticated:false,
       spinner:true,
+
       errors:{
         auth:''
       }
+
     }
   },
   beforeMount() {
@@ -62,7 +64,7 @@ name: "MyAccount",
     },
     log_out(){
        this.spinner = true;
-       axios.post('http://127.0.0.1:8000/api/logout',
+       axios.post(this.$store.state.axios_request_url+'/api/logout',
       {id:this.user.id},
      {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
 

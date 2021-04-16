@@ -71,7 +71,7 @@ export default {
 
   mounted() {
 
-    Pusher.logToConsole = true;
+    Pusher.logToConsole = false;
     this.channel.bind('pusher:subscription_succeeded', function() {
     }).bind('App\\Events\\NewMessage',(data)=>{
       if (parseInt(data.session) === parseInt(this.form.chat_session)){
@@ -79,12 +79,11 @@ export default {
       }
     }).bind('client-user_typing',(data)=>{
       if (parseInt(data.session) === this.form.chat_session){
-        this.name_typing = data.name;
+        this.name_typing = data.name+' typing...';
         this.reset_show_typing_event();
       }
     });
   },
-
 
   methods:{
 
