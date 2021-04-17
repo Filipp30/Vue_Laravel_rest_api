@@ -4,7 +4,7 @@
     <header class="header">
         <h1>Chat</h1>
         <p class="name_typing"> {{name_typing}}</p>
-        <button v-on:click="remove_chat_session">Exit Chat-Room</button>
+        <button v-on:click="remove_chat_session">Exit Chat</button>
     </header>
 
     <Spinner v-if="spinner"/>
@@ -18,14 +18,12 @@
     </section>
 
     <form @submit.prevent="post_message" class="inp_form">
-        <input v-model="form.input_message" type="text" class="input" placeholder="Enter your message...">
+        <input v-model="form.input_message" required="required" type="text" class="input" placeholder="Enter your message...">
         <button type="submit" class="btn">Send</button>
     </form>
 
     <p class="info_bottom">{{information_status_field_chat_template}}</p>
-
   </div>
-
 </template>
 
 <script>
@@ -57,6 +55,7 @@ export default {
             name:sessionStorage.getItem("user_name"),
             chat_session: localStorage.getItem('chat_session')
         },
+        error_message_empty_chat_session:"Chat session was removed.Start new chat session.If you have any problems with this application,please send us an email",
       }
     },
 
@@ -67,7 +66,7 @@ export default {
       Pusher.logToConsole = false;
       this.channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=>{
-        if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))){
+        if (parseInt(data.session) === parseInt(this.form.chat_session)){
           this.addChatMessageFromEventListenerToLocalArray(data);
         }
       }).bind('client-user_typing',(data)=>{
@@ -86,7 +85,7 @@ export default {
             {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`},
               params:{chat_session:localStorage.getItem('chat_session')}
         }).then(response=>{
-          this.messages = response.data
+          this.messages = response.data;
         }).catch(error=>{
           this.information_status_field_chat_template = error;
         }).finally(()=>{
@@ -95,6 +94,10 @@ export default {
       },
 
       post_message(){
+        if (!localStorage.getItem('chat_session')){
+          this.use_chat_area_for_show_error_messages(this.error_message_empty_chat_session);
+          return;
+        }
         this.information_status_field_chat_template = 'shipment...';
         axios.post(this.$store.state.axios_request_url+'/api/chat/add_message',
             this.form, {
@@ -117,6 +120,7 @@ export default {
 
       remove_chat_session(){
         if (!localStorage.getItem('chat_session')){
+          this.use_chat_area_for_show_error_messages(this.error_message_empty_chat_session);
           return;
         }
         this.spinner = true;
@@ -126,20 +130,25 @@ export default {
           }).then(()=>{
             localStorage.removeItem('chat_session')
             this.form.chat_session = '';
-            this.messages = '';
-            this.messages = 'This chat room was removed.Please sing in for a new chat session.'
-            this.$router.push({name: 'Home'});
+            this.use_chat_area_for_show_error_messages(this.error_message_empty_chat_session);
           }).catch((error)=>{
-          this.information_status_field_chat_template = error;
+            this.information_status_field_chat_template = error;
+            this.use_chat_area_for_show_error_messages(error);
           }).finally(()=>{
             this.spinner = false;
         });
+      },
+
+      use_chat_area_for_show_error_messages(error_message){
+        this.messages = '';
+        this.messages = [{created_at:'--->',user:{name:'Admin:Filipp.G-(filipp-tts@outlook.com)'},
+        message:error_message}];
       }
     },
 
     watch:{
       'form.input_message': function(){
-        this.channel.trigger('client-user_typing',{name:this.user.name,session:this.form.chat_session});
+        this.channel.trigger('client-user_typing',{name:this.user,session:this.form.chat_session});
       },
     },
 

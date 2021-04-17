@@ -9,7 +9,7 @@
 
         <div v-if="user_is_authenticated"   class="authenticated">
           <div v-if="chat_session_exist === false" class="chat_connect">
-              <p>Welcome {{user_information.name}}</p>
+              <p>Welcome {{user.name}}</p>
               <button v-on:click="create_new_chat_session">Connect to Live-Chat</button>
           </div>
 
@@ -44,7 +44,7 @@ export default {
 
   data(){
     return{
-      user_information:'',
+      user:'',
       unique_chat_session_token:'',
       spinner:false,
       user_is_authenticated:false,
@@ -64,6 +64,7 @@ export default {
           {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
       }).then(response=>{
         sessionStorage.setItem("user_name",response.data.name)
+        this.user = response.data;
         this.user_is_authenticated = true;
         if (localStorage.getItem('chat_session')){
           this.chat_session_exist = true

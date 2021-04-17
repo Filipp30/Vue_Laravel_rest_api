@@ -33,16 +33,18 @@ export default {
   data(){
     return{
       show_new_message_pop_up: false,
-      show_chat_template:false
-
+      show_chat_template:false,
+      channel:this.$store.state.contact_chat_channel,
     }
   },
 
   mounted() {
-    setInterval(()=>{
-      if (!this.show_new_message_pop_up)
-      this.show_new_message_pop_up = true;
-    },2000);
+    this.channel.bind('pusher:subscription_succeeded', function() {
+    }).bind('App\\Events\\NewMessage',(data)=> {
+      if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))) {
+        this.show_new_message_pop_up = true;
+      }
+    });
   },
 
   methods:{
