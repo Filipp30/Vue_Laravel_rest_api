@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+
     <Navi/>
     <router-view/>
 
@@ -12,7 +13,6 @@
       <PopUp_NewMessage v-on:click="show_chat_template = !show_chat_template"/>
     </div>
 
-
   </div>
 </template>
 
@@ -23,11 +23,11 @@ import PopUp_NewMessage from "./components/PopUp_NewMessage";
 import ChatTemplate from "./components/Contact_page_components/ChatTemplate";
 export default {
   name: 'App',
+
   components: {
     Navi,
     PopUp_NewMessage,
     ChatTemplate
-
   },
 
   data(){
@@ -35,16 +35,19 @@ export default {
       show_new_message_pop_up: false,
       show_chat_template:false,
       channel:this.$store.state.contact_chat_channel,
+      chat_session: localStorage.getItem('chat_session'),
     }
   },
 
   mounted() {
-    this.channel.bind('pusher:subscription_succeeded', function() {
-    }).bind('App\\Events\\NewMessage',(data)=> {
-      if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))) {
-        this.show_new_message_pop_up = true;
-      }
-    });
+
+      this.channel.bind('pusher:subscription_succeeded', function() {
+      }).bind('App\\Events\\NewMessage',(data)=> {
+        if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))) {
+          this.show_new_message_pop_up = true;
+        }
+      });
+
   },
 
   methods:{
@@ -52,11 +55,7 @@ export default {
       this.show_new_message_pop_up = false;
       this.show_chat_template = false;
     },
-
-
-  }
-
-
+  },
 
 
 }
