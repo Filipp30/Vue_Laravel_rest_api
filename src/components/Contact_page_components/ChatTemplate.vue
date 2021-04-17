@@ -196,15 +196,6 @@ export default {
         overflow-y: auto;
         padding: 1px 10px;
     }
-    //.messages::-webkit-scrollbar {
-    //    width: 6px;
-    //}
-    //.messages::-webkit-scrollbar-track {
-    //    background: #ddd;
-    //}
-    //.messages::-webkit-scrollbar-thumb {
-    //    background: #bdbdbd;
-    //}
 
     .inp_form {
         border-top: 1px solid #1a202c;
@@ -235,9 +226,16 @@ export default {
         }
     }
     .info_bottom{
-        margin:0 110px;
-        font-size: 15px;
-        height: 0px;
+      border-radius: 10px;
+      height: 25px;
+      width: 180px;
+      margin:auto;
+      font-size: 15px;
+      font-weight: bold;
+      text-align: center;
+      background-color: #dddddd;
+
+
     }
 
 }
