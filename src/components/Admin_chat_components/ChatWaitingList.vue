@@ -49,7 +49,6 @@ export default {
           {headers: {"Authorization": `Bearer ${localStorage.getItem('jwt_token')}`}
       }).then(response=>{
           this.chat_session_list = response.data;
-          console.log(response.data)
       }).catch(error=>{
         console.log(error)
       }).finally(()=>{

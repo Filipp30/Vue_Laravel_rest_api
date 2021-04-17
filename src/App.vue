@@ -67,7 +67,6 @@ export default {
 
   methods:{
     on_pop_up_x_pressed(){
-      // this.show_new_message_pop_up = false;
       this.$store.dispatch('setNewMessageLogoTo_false');
       this.show_chat_template = false;
     },
