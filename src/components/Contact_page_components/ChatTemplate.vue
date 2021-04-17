@@ -4,7 +4,7 @@
     <header class="header">
         <h1>Chat</h1>
         <p class="name_typing"> {{name_typing}}</p>
-        <button v-on:click="remove_chat_session">Close</button>
+        <button v-on:click="remove_chat_session">Exit Chat-Room</button>
     </header>
 
     <Spinner v-if="spinner"/>
@@ -37,7 +37,6 @@ import Pusher from "pusher-js";
 
 export default {
     name: "ChatTemplate",
-    props:['user'],
 
     components:{
       Spinner,
@@ -51,10 +50,11 @@ export default {
         spinner:false,
         information_status_field_chat_template:'',
         channel:this.$store.state.contact_chat_channel,
+        user: sessionStorage.getItem("user_name"),
 
         form:{
             input_message:'',
-            name: this.user.name,
+            name:sessionStorage.getItem("user_name"),
             chat_session: localStorage.getItem('chat_session')
         },
       }
@@ -67,7 +67,6 @@ export default {
       Pusher.logToConsole = false;
       this.channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=>{
-        console.log(typeof data.session)
         if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))){
           this.addChatMessageFromEventListenerToLocalArray(data);
         }
@@ -117,6 +116,9 @@ export default {
       },
 
       remove_chat_session(){
+        if (!localStorage.getItem('chat_session')){
+          return;
+        }
         this.spinner = true;
         axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
             {chat_session:localStorage.getItem('chat_session')},
@@ -124,6 +126,8 @@ export default {
           }).then(()=>{
             localStorage.removeItem('chat_session')
             this.form.chat_session = '';
+            this.messages = '';
+            this.messages = 'This chat room was removed.Please sing in for a new chat session.'
             this.$router.push({name: 'Home'});
           }).catch((error)=>{
           this.information_status_field_chat_template = error;

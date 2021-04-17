@@ -14,8 +14,7 @@
           </div>
 
           <div v-if="chat_session_exist" class="chat__template">
-              <ChatTemplate
-                  v-bind:user="user_information"/>
+              <ChatTemplate/>
           </div>
         </div>
 
@@ -64,7 +63,7 @@ export default {
       axios.get(this.$store.state.axios_request_url+'/api/user',
           {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
       }).then(response=>{
-        this.user_information = response.data;
+        sessionStorage.setItem("user_name",response.data.name)
         this.user_is_authenticated = true;
         if (localStorage.getItem('chat_session')){
           this.chat_session_exist = true
