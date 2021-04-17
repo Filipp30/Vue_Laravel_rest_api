@@ -33,7 +33,7 @@
 import Spinner from "../Spinner";
 import ChatTemplate from "./ChatTemplate";
 import axios from "axios";
-
+import {mapState} from "vuex";
 export default {
   name: "ChatForm",
 
@@ -94,6 +94,18 @@ export default {
 
 
   },
+  computed:{
+    ...mapState(['on_exit_chat_pressed'])
+  },
+
+  watch:{
+
+    on_exit_chat_pressed(){
+      this.chat_session_exist = false;
+    }
+
+  },
+
 }
 </script>
 

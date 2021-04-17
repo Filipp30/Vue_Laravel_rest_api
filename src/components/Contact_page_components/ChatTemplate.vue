@@ -131,6 +131,8 @@ export default {
             localStorage.removeItem('chat_session')
             this.form.chat_session = '';
             this.use_chat_area_for_show_error_messages(this.error_message_empty_chat_session);
+            this.$store.dispatch('setNewMessageLogoTo_false');
+            this.$store.dispatch('hidden_sticky_chat_template');
           }).catch((error)=>{
             this.information_status_field_chat_template = error;
             this.use_chat_area_for_show_error_messages(error);

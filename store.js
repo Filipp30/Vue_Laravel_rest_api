@@ -18,19 +18,36 @@ const store = createStore({
             }
         }).subscribe('private-my-channel'),
 
-    },
-    mutations:{
+        show_new_message:false,
+        on_exit_chat_pressed:false
 
     },
     actions:{
+        setNewMessageLogoTo_false(ctx){
+            ctx.commit('setToFalse');
+        },
+        setNewMessageLogoTo_true(ctx){
+            ctx.commit('setToTrue');
+        },
+        hidden_sticky_chat_template(ctx){
+            ctx.commit('hidden_sticky_template');
+        }
+    },
+    mutations:{
+        setToFalse(state){
+            state.show_new_message = false;
+        },
+        setToTrue(state){
+            state.show_new_message = true;
+        },
+        hidden_sticky_template(state){
+            state.on_exit_chat_pressed = !state.on_exit_chat_pressed;
+        }
 
     },
-    getters:{
 
-    },
-    modules:{
 
-    }
+
 })
 
 export default store
