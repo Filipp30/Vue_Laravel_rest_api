@@ -44,7 +44,8 @@ export default {
 
       this.channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=> {
-        if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))) {
+        if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))
+            && data.user.name !== sessionStorage.getItem('user_name')){
           this.$store.dispatch('setNewMessageLogoTo_true');
         }
       });
