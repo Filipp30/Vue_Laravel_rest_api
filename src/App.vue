@@ -21,7 +21,8 @@
 import Navi from "./components/Navi";
 import PopUp_NewMessage from "./components/PopUp_NewMessage";
 import ChatTemplate from "./components/Contact_page_components/ChatTemplate";
-import {mapState} from "vuex";
+import {mapGetters} from "vuex";
+
 export default {
   name: 'App',
 
@@ -41,37 +42,28 @@ export default {
   },
 
   mounted() {
-
       this.channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=> {
         if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))
             && data.user.name !== sessionStorage.getItem('user_name')){
-          this.$store.dispatch('setNewMessageLogoTo_true');
+            this.show_new_message_pop_up = true;
         }
       });
-  },
-  computed:{
-    ...mapState(['show_new_message']),
-    ...mapState(['on_exit_chat_pressed'])
-  },
-
-  watch:{
-    show_new_message(newValue){
-      this.show_new_message_pop_up = newValue;
-    },
-    on_exit_chat_pressed(){
-      this.show_chat_template = false;
-    }
-
   },
 
   methods:{
     on_pop_up_x_pressed(){
-      this.$store.dispatch('setNewMessageLogoTo_false');
+      this.show_new_message_pop_up = false;
       this.show_chat_template = false;
     },
   },
 
+  computed:mapGetters(['exitChat']),
+  watch:{
+    exitChat(){
+      this.on_pop_up_x_pressed();
+    }
+  },
 
 }
 </script>
