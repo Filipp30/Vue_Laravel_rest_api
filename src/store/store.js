@@ -2,6 +2,7 @@ import { createStore } from "vuex"
 import Pusher from "pusher-js";
 import chat from "./modules/chat";
 
+
 const store = createStore({
     state:{
         axios_request_url: "http://stuworld.space",
@@ -27,7 +28,8 @@ const store = createStore({
 
     },
     modules:{
-        chat
+        chat,
+
     }
 
 })
