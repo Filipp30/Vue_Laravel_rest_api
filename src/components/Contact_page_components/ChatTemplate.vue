@@ -124,16 +124,14 @@ export default {
           return;
         }
         this.spinner = true;
-        this.$store.dispatch('exit_chat_pressed');
         axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
             {chat_session:localStorage.getItem('chat_session')},
             {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
           }).then(()=>{
-
             this.form.chat_session = '';
             this.use_chat_area_for_show_error_messages(this.error_message_empty_chat_session);
+            this.$store.dispatch('exit_chat_pressed');
           }).catch((error)=>{
-            this.information_status_field_chat_template = error;
             this.use_chat_area_for_show_error_messages(error);
           }).finally(()=>{
             this.spinner = false;

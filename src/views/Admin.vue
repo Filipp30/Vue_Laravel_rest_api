@@ -1,25 +1,33 @@
 <template>
   <div>
 
-    <div>
-      <h1>Admin page</h1>
-    </div>
-
     <section v-if="user_authenticated === false"  class="waiting_authentication">
       <Spinner_2 v-if="spinner"/>
       <h3 class="error_auth">{{errors.auth}}</h3>
     </section>
 
-    <section v-if="user_authenticated" class="auth_account">
-      <h1>Welcome <span><h3>{{user.name}}</h3></span></h1>
-      <h3>This page is under construction !</h3>
-      <button v-on:click="log_out">Log Out</button>
-      <Spinner_2 v-if="spinner"/>
+    <section v-if="user_authenticated" class="main">
+
+      <header  class="main__header">
+        <h3>Welcome {{user.name}}</h3>
+        <nav class="navigation">
+          <button>Chat Room</button>
+          <button>Edit Shop</button>
+          <button>Edit Forum</button>
+          <button>Orders</button>
+
+          <button v-on:click="log_out">Log Out</button>
+
+        </nav>
+
+      </header>
+
+      <section>
+        <Chat v-bind:user="user" />
+      </section>
+
     </section>
 
-    <section>
-      <Chat v-bind:user="user" />
-    </section>
 
 
   </div>
@@ -108,15 +116,28 @@ export default {
     color: $font_color;
   }
 }
-.auth_account{
-  margin: 50px auto;
-  border: 1px solid black;
-  height: 400px;
-  width: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+
+.main{
+
+  &__header{
+    height: 100px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .navigation{
+
+      width: 450px;
+      border: 1px solid red;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+
+
 }
+
 
 </style>

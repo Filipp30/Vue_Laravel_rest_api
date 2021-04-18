@@ -9,7 +9,7 @@
         <header class="header">
           <h1>Chat</h1>
           <p class="name_typing"> {{name_typing}}</p>
-          <button >Close</button>
+          <button v-on:click="remove_this_chat_session">Remove</button>
         </header>
 
         <Spinner v-if="spinner"/>
@@ -122,6 +122,31 @@ export default {
     addChatMessageFromEventListenerToLocalArray(data){
       this.messages.push(data);
     },
+
+    remove_this_chat_session(){
+        if (!this.form.chat_session){
+          this.use_chat_area_for_show_error_messages('Select first a session');
+          return;
+        }
+        this.spinner = true;
+        axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
+            {chat_session:this.form.chat_session},
+            {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+            }).then(()=>{
+          this.use_chat_area_for_show_error_messages('Chat Session: '+this.form.chat_session+' was removed.');
+          this.form.chat_session = '';
+        }).catch((error)=>{
+          this.use_chat_area_for_show_error_messages(error);
+        }).finally(()=>{
+          this.spinner = false;
+        });
+    },
+
+    use_chat_area_for_show_error_messages(error_message){
+      this.messages = '';
+      this.messages = [{created_at:'--->',user:{name:'Error : '},
+        message:error_message}];
+    }
 
   },
 

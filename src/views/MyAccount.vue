@@ -71,6 +71,8 @@ name: "MyAccount",
       }).then(response=>{
          console.log(response.data.message)
          localStorage.removeItem('jwt_token');
+         localStorage.clear();
+         sessionStorage.clear();
       }).catch(error=>{
          console.log(error);
       }).finally(()=>{

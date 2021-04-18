@@ -81,7 +81,7 @@ export default {
     height: 500px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     overflow-y: scroll;
 

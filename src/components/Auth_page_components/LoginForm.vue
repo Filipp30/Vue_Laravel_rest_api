@@ -89,7 +89,7 @@ export default {
           }else{
             this.$router.push('my_account');
           }
-        },1500);
+        },1000);
       }).catch(error=>{
         this.response_from_axios_login_request = error.response.data.message;
 
