@@ -87,7 +87,8 @@ export default {
         }).then(response=>{
           this.messages = response.data;
         }).catch(error=>{
-          this.information_status_field_chat_template = error;
+          this.use_chat_area_for_show_error_messages(error.response.data.message);
+          localStorage.removeItem('chat_session');
         }).finally(()=>{
           this.spinner = false
         })
@@ -105,8 +106,9 @@ export default {
         }).then((response)=>{
           this.form.input_message='';
           this.information_status_field_chat_template = response.data.message;
-        }).catch((error)=>{
-          this.information_status_field_chat_template = error;
+        }).catch(error=>{
+          this.use_chat_area_for_show_error_messages(error.response.data.message);
+          localStorage.removeItem('chat_session');
         }).finally(()=>{
           setTimeout(()=>{
             this.information_status_field_chat_template = '';
