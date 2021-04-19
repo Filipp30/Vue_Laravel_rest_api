@@ -84,7 +84,7 @@ export default {
       axios.get(this.$store.state.axios_request_url+'/api/chat/create_new_chat_session',
         {headers: {"Authorization": `Bearer ${localStorage.getItem('jwt_token')}`}
         }).then(response=>{
-          localStorage.setItem('chat_session',response.data);
+          localStorage.setItem('chat_session',response.data.chat_session);
           this.chat_session_exist = true;
         }).catch(error=>{
           console.log(error)

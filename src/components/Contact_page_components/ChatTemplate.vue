@@ -48,6 +48,7 @@ export default {
         spinner:false,
         information_status_field_chat_template:'',
         channel:this.$store.state.contact_chat_channel,
+
         user: sessionStorage.getItem("user_name"),
 
         form:{
