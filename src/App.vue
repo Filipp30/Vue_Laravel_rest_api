@@ -42,6 +42,7 @@ export default {
   },
 
   mounted() {
+
       this.channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=> {
         if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))
