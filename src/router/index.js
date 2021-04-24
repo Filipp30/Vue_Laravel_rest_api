@@ -33,7 +33,7 @@ const routes = [
     name: 'MyAccount',
     component: MyAccount,
     beforeEnter:(to,from,next)=>{
-      if (localStorage.getItem('jwt_token')){
+      if (sessionStorage.getItem('jwt_token')){
         next();
       }else{
         next({name: 'Auth'});
@@ -50,7 +50,7 @@ const routes = [
     name: 'Admin',
     component: Admin,
     beforeEnter:(to,from,next)=>{
-      if (localStorage.getItem('jwt_token')){
+      if (sessionStorage.getItem('jwt_token')){
         next();
       }else{
         next({name: 'Auth'});

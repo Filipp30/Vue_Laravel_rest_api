@@ -5,7 +5,7 @@
     <router-view/>
 
     <div v-if="show_chat_template" class="chat_template">
-      <ChatTemplate  />
+      <ChatTemplate/>
     </div>
 
     <div v-if="show_new_message_pop_up" class="pop_up_new_message">
@@ -21,7 +21,8 @@
 import Navi from "./components/Navi";
 import PopUp_NewMessage from "./components/PopUp_NewMessage";
 import ChatTemplate from "./components/Contact_page_components/ChatTemplate";
-import {mapGetters} from "vuex";
+
+import {mapGetters,mapState} from 'vuex';
 
 export default {
   name: 'App',
@@ -34,22 +35,37 @@ export default {
 
   data(){
     return{
+      chat_session: localStorage.getItem('chat_session'),
       show_new_message_pop_up: false,
       show_chat_template:false,
-      channel:this.$store.state.contact_chat_channel,
-      chat_session: localStorage.getItem('chat_session'),
+    }
+  },
+
+  computed: {
+    ...mapState(['contact_chat_channel','channel_connection_status']),
+    ...mapGetters(['exitChat']),
+  },
+
+  watch:{
+    exitChat(){
+      this.on_pop_up_x_pressed();
+    },
+    channel_connection_status(){
+      console.log('App.vue -->pusher connection is :'+this.channel_connection_status)
     }
   },
 
   mounted() {
-
-      this.channel.bind('pusher:subscription_succeeded', function() {
-      }).bind('App\\Events\\NewMessage',(data)=> {
-        if (parseInt(data.session) === parseInt(localStorage.getItem('chat_session'))
-            && data.user.name !== sessionStorage.getItem('user_name')){
+      if (this.channel_connection_status === 'connected'){
+        this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
+        }).bind('App\\Events\\NewMessage',(data)=> {
+          console.log('new message in app listener')
+          if (parseInt(data.session) === parseInt(sessionStorage.getItem('chat_session'))
+              && data.user.name !== sessionStorage.getItem('user_name')){
             this.show_new_message_pop_up = true;
-        }
-      });
+          }
+        });
+      }
   },
 
   methods:{
@@ -59,12 +75,7 @@ export default {
     },
   },
 
-  computed:mapGetters(['exitChat']),
-  watch:{
-    exitChat(){
-      this.on_pop_up_x_pressed();
-    }
-  },
+
 
 }
 </script>

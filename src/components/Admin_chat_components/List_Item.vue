@@ -26,6 +26,7 @@
 <script>
 import Pusher from "pusher-js";
 import {debounce} from "lodash";
+import {mapState} from "vuex";
 
 export default {
   name: "WaitingList_Item",
@@ -37,24 +38,30 @@ export default {
       show_new_message_exist: false,
       show_typing_active: false,
       reset_show_typing_event:debounce(function () {this.show_typing_active = false}, 1500),
-      channel:this.$store.state.contact_chat_channel,
     }
+  },
+
+  computed:{
+    ...mapState(['contact_chat_channel','channel_connection_status']),
   },
 
   mounted() {
 
-    Pusher.logToConsole =false;
-    this.channel.bind('pusher:subscription_succeeded', function() {
-    }).bind('App\\Events\\NewMessage',(data)=>{
-      if (parseInt(data.session) === this.item.session){
-        this.show_new_message_exist = true;
-      }
-    }).bind('client-user_typing',data=>{
-      if (parseInt(data.session) === this.item.session){
-        this.show_typing_active = true;
-        this.reset_show_typing_event();
-      }
-    });
+    if (this.channel_connection_status === 'connected'){
+      Pusher.logToConsole =false;
+      this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
+      }).bind('App\\Events\\NewMessage',(data)=>{
+        if (parseInt(data.session) === this.item.session){
+          this.show_new_message_exist = true;
+        }
+      }).bind('client-user_typing',data=>{
+        if (parseInt(data.session) === this.item.session){
+          this.show_typing_active = true;
+          this.reset_show_typing_event();
+        }
+      });
+    }
+
   },
 
   methods:{

@@ -61,9 +61,10 @@ export default {
     this.get_user_authentication();
   },
   methods:{
+
     get_user_authentication(){
       axios.get(this.$store.state.axios_request_url+'/api/user',
-          {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+          {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`}
           }).then(response=>{
         if (!response.data['isAdmin']){
           this.$router.push('my_account');
@@ -82,22 +83,22 @@ export default {
         this.spinner = false;
       });
     },
+
     log_out(){
       this.spinner = true;
       axios.post(this.$store.state.axios_request_url+'/api/logout',
           {id:this.user.id},
-          {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+          {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`}
 
           }).then(response=>{
         console.log(response.data.message)
-        localStorage.removeItem('jwt_token');
+        sessionStorage.removeItem('jwt_token');
       }).catch(error=>{
         console.log(error);
       }).finally(()=>{
         this.$router.push('Auth');
       });
     },
-
 
   }
 }

@@ -44,7 +44,7 @@ name: "MyAccount",
   methods:{
     get_user_authentication(){
       axios.get(this.$store.state.axios_request_url+'/api/user',
-      {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+      {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`}
       }).then(response=>{
         this.user = response.data;
         if (response.data['isAdmin']){
@@ -66,11 +66,11 @@ name: "MyAccount",
        this.spinner = true;
        axios.post(this.$store.state.axios_request_url+'/api/logout',
       {id:this.user.id},
-     {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+     {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`}
 
       }).then(response=>{
          console.log(response.data.message)
-         localStorage.removeItem('jwt_token');
+         sessionStorage.removeItem('jwt_token');
          localStorage.clear();
          sessionStorage.clear();
       }).catch(error=>{

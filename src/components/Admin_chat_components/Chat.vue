@@ -2,7 +2,7 @@
   <section class="chat">
 
       <div class="chat__list">
-        <ChatWaitingList  v-on:on_chat_session_clicked="on_chat_session_clicked"/>
+        <ChatWaitingList v-if="pusher_connected"  v-on:on_chat_session_clicked="on_chat_session_clicked"/>
       </div>
 
       <div class="chat__module">
@@ -41,6 +41,7 @@ import {debounce} from "lodash";
 import Spinner from "../Spinner";
 import axios from "axios";
 import Pusher from "pusher-js";
+import {mapState} from "vuex";
 
 export default {
   name: "Chat",
@@ -59,46 +60,71 @@ export default {
       reset_show_typing_event:debounce(function () {this.name_typing =''}, 1300),
       spinner:false,
       information_status_field_chat_template:'',
-      channel:this.$store.state.contact_chat_channel,
 
       form:{
         input_message:'',
         name: '',
         chat_session:''
       },
+
+      pusher_connected:false
     }
+  },
+
+  computed:{
+    ...mapState(['contact_chat_channel','channel_connection_status']),
   },
 
   mounted() {
 
-    Pusher.logToConsole = false;
-    this.channel.bind('pusher:subscription_succeeded', function() {
-    }).bind('App\\Events\\NewMessage',(data)=>{
-      if (parseInt(data.session) === parseInt(this.form.chat_session)){
-        this.addChatMessageFromEventListenerToLocalArray(data);
-      }
-    }).bind('client-user_typing',(data)=>{
-      if (parseInt(data.session) === this.form.chat_session){
-        this.name_typing = data.name+' typing...';
-        this.reset_show_typing_event();
-      }
-    });
+    if (!sessionStorage.getItem('jwt_token')){
+      this.$router.push('Auth');
+    }
+
+    this.get_pusher_connection();
+
+    if (this.pusher_connected){
+      Pusher.logToConsole = false;
+      this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
+      }).bind('App\\Events\\NewMessage',(data)=>{
+        if (parseInt(data.session) === parseInt(this.form.chat_session)){
+          this.addChatMessageFromEventListenerToLocalArray(data);
+        }
+      }).bind('client-user_typing',(data)=>{
+        if (parseInt(data.session) === this.form.chat_session){
+          this.name_typing = data.name+' typing...';
+          this.reset_show_typing_event();
+        }
+      });
+    }
+
   },
 
   methods:{
 
+    get_pusher_connection(){
+      if (this.channel_connection_status !=='connected'){
+        this.pusher_connected = false;
+        this.$store.dispatch('set_channel');
+      }else if (this.channel_connection_status === 'connected'){
+        this.pusher_connected = true;
+      }
+    },
+
     on_chat_session_clicked(session){
-      this.form.chat_session = session;
       this.spinner = true;
+      this.form.chat_session = session;
       axios.get(this.$store.state.axios_request_url+'/api/chat/get_chat_session_messages',
-          {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`},
+          {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`},
             params:{chat_session:session}
           }).then(response=>{
-        this.messages = response.data
+        this.messages = response.data;
+
       }).catch(error=>{
-        this.information_status_field_chat_template = error;
+        this.use_chat_area_for_show_error_messages(error.message)
+
       }).finally(()=>{
-        this.spinner = false
+        this.spinner = false;
       })
     },
 
@@ -106,7 +132,7 @@ export default {
       this.information_status_field_chat_template = 'shipment...';
       axios.post(this.$store.state.axios_request_url + '/api/chat/add_message',
           this.form, {
-            headers: {"Authorization": `Bearer ${localStorage.getItem('jwt_token')}`}
+            headers: {"Authorization": `Bearer ${sessionStorage.getItem('jwt_token')}`}
           }).then((response) => {
         this.form.input_message = '';
         this.information_status_field_chat_template = response.data.message;
@@ -131,7 +157,7 @@ export default {
         this.spinner = true;
         axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
             {chat_session:this.form.chat_session},
-            {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+            {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`}
             }).then(()=>{
           this.use_chat_area_for_show_error_messages('Chat Session: '+this.form.chat_session+' was removed.');
           this.form.chat_session = '';
@@ -152,8 +178,17 @@ export default {
 
   watch:{
     'form.input_message': function(){
-      this.channel.trigger('client-user_typing',{name:this.user.name,session:this.form.chat_session});
+      this.contact_chat_channel.trigger('client-user_typing',{name:this.user.name,session:this.form.chat_session});
     },
+
+    channel_connection_status(){
+      if (this.channel_connection_status === 'connected'){
+        this.pusher_connected = true;
+      }else{
+        this.pusher_connected = false;
+      }
+    }
+
   },
 
 

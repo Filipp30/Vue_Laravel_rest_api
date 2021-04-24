@@ -11,6 +11,7 @@
 import axios from "axios";
 import List_Item from "./List_Item";
 import Spinner_2 from "../Spinner_2";
+import {mapState} from "vuex";
 
 export default {
   name: "ChatWaitingList",
@@ -24,8 +25,11 @@ export default {
     return{
       chat_session_list:[],
       spinner:false,
-      channel:this.$store.state.contact_chat_channel,
     }
+  },
+
+  computed:{
+    ...mapState(['contact_chat_channel','channel_connection_status']),
   },
 
   beforeMount() {
@@ -33,12 +37,14 @@ export default {
   },
   mounted() {
 
-    this.channel.bind('App\\Events\\NewChatSessionCreated',data=>{
-      this.add_session_to_local_wait_list(data);
-    });
-    this.channel.bind('App\\Events\\ChatSessionRemoved',data=>{
-      this.remove_session_from_local_wait_list(data)
-    });
+    if (this.channel_connection_status === 'connected'){
+      this.contact_chat_channel.bind('App\\Events\\NewChatSessionCreated',data=>{
+        this.add_session_to_local_wait_list(data);
+      });
+      this.contact_chat_channel.bind('App\\Events\\ChatSessionRemoved',data=>{
+        this.remove_session_from_local_wait_list(data)
+      });
+    }
 
   },
 
@@ -46,7 +52,7 @@ export default {
     get_chat_session_waiting_list(){
       this.spinner = true;
       axios.get(this.$store.state.axios_request_url+'/api/admin/contact/chat/chat_session_waiting_list',
-          {headers: {"Authorization": `Bearer ${localStorage.getItem('jwt_token')}`}
+          {headers: {"Authorization": `Bearer ${sessionStorage.getItem('jwt_token')}`}
       }).then(response=>{
           this.chat_session_list = response.data;
       }).catch(error=>{

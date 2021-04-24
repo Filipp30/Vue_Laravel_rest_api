@@ -79,7 +79,7 @@ export default {
       axios.post(this.$store.state.axios_request_url+'/api/login', this.request_login_form
 
       ).then(response=>{
-        localStorage.setItem('jwt_token',response.data['jwt_token']['plainTextToken']);
+        sessionStorage.setItem('jwt_token',response.data['jwt_token']['plainTextToken']);
         this.request_login_form.email = '';
         this.request_login_form.password = '';
         this.response_from_axios_login_request = 'Login successfully';

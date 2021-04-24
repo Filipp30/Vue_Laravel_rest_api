@@ -32,6 +32,7 @@ import {debounce} from "lodash";
 import Spinner from "../Spinner";
 import axios from "axios";
 import Pusher from "pusher-js";
+import {mapState} from "vuex";
 
 export default {
     name: "ChatTemplate",
@@ -47,25 +48,28 @@ export default {
         reset_show_typing_event:debounce(function () {this.name_typing =''}, 1300),
         spinner:false,
         information_status_field_chat_template:'',
-        channel:this.$store.state.contact_chat_channel,
 
         user: sessionStorage.getItem("user_name"),
 
         form:{
             input_message:'',
             name:sessionStorage.getItem("user_name"),
-            chat_session: localStorage.getItem('chat_session')
+            chat_session: sessionStorage.getItem('chat_session')
         },
         error_message_empty_chat_session:"Chat session was removed.Start new chat session.If you have any problems with this application,please send us an email",
       }
     },
 
+    computed:{
+      ...mapState(['contact_chat_channel','channel_connection_status']),
+    },
+
     mounted() {
       this.get_all_session_chat_messages();
 
-      //Chat Event Listeners / Handlers
+      if (this.channel_connection_status === 'connected')
       Pusher.logToConsole = false;
-      this.channel.bind('pusher:subscription_succeeded', function() {
+      this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=>{
         if (parseInt(data.session) === parseInt(this.form.chat_session)){
           this.addChatMessageFromEventListenerToLocalArray(data);
@@ -83,33 +87,33 @@ export default {
       get_all_session_chat_messages() {
         this.spinner = true;
         axios.get(this.$store.state.axios_request_url+'/api/chat/get_chat_session_messages',
-            {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`},
-              params:{chat_session:localStorage.getItem('chat_session')}
+            {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`},
+              params:{chat_session:sessionStorage.getItem('chat_session')}
         }).then(response=>{
           this.messages = response.data;
         }).catch(error=>{
           this.use_chat_area_for_show_error_messages(error.response.data.message);
-          localStorage.removeItem('chat_session');
+          sessionStorage.removeItem('chat_session');
         }).finally(()=>{
           this.spinner = false
         })
       },
 
       post_message(){
-        if (!localStorage.getItem('chat_session')){
+        if (!sessionStorage.getItem('chat_session')){
           this.use_chat_area_for_show_error_messages(this.error_message_empty_chat_session);
           return;
         }
         this.information_status_field_chat_template = 'shipment...';
         axios.post(this.$store.state.axios_request_url+'/api/chat/add_message',
             this.form, {
-              headers: {"Authorization": `Bearer ${localStorage.getItem('jwt_token')}`}
+              headers: {"Authorization": `Bearer ${sessionStorage.getItem('jwt_token')}`}
         }).then((response)=>{
           this.form.input_message='';
           this.information_status_field_chat_template = response.data.message;
         }).catch(error=>{
           this.use_chat_area_for_show_error_messages(error.response.data.message);
-          localStorage.removeItem('chat_session');
+          sessionStorage.removeItem('chat_session');
         }).finally(()=>{
           setTimeout(()=>{
             this.information_status_field_chat_template = '';
@@ -122,14 +126,14 @@ export default {
       },
 
       remove_chat_session(){
-        if (!localStorage.getItem('chat_session')){
+        if (!sessionStorage.getItem('chat_session')){
           this.use_chat_area_for_show_error_messages(this.error_message_empty_chat_session);
           return;
         }
         this.spinner = true;
         axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
-            {chat_session:localStorage.getItem('chat_session')},
-            {headers:{"Authorization" : `Bearer ${localStorage.getItem('jwt_token')}`}
+            {chat_session:sessionStorage.getItem('chat_session')},
+            {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`}
           }).then(()=>{
             this.form.chat_session = '';
             this.use_chat_area_for_show_error_messages(this.error_message_empty_chat_session);
@@ -150,7 +154,7 @@ export default {
 
     watch:{
       'form.input_message': function(){
-        this.channel.trigger('client-user_typing',{name:this.user,session:this.form.chat_session});
+        this.contact_chat_channel.trigger('client-user_typing',{name:this.user,session:this.form.chat_session});
       },
     },
 

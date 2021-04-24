@@ -89,7 +89,7 @@ export default {
       axios.post(this.$store.state.axios_request_url+'/api/registration', this.registration_form
 
       ).then(response=>{
-        localStorage.setItem('jwt_token',response.data.token);
+        sessionStorage.setItem('jwt_token',response.data.token);
         this.response_from_axios_request = 'Registration successfully';
         this.registration_form.name = '';
         this.registration_form.email = '';

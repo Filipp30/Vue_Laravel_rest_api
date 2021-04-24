@@ -9,8 +9,8 @@ export default {
     actions:{
 
         exit_chat_pressed(ctx){
-            ctx.commit('exit_chat_pressed')
-            localStorage.removeItem('chat_session');
+            sessionStorage.removeItem('chat_session');
+            ctx.commit('exit_chat_pressed');
         }
     },
 
