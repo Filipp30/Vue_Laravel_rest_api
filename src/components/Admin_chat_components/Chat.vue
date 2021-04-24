@@ -121,7 +121,7 @@ export default {
         this.messages = response.data;
 
       }).catch(error=>{
-        this.use_chat_area_for_show_error_messages(error.message)
+        this.use_chat_area_for_show_error_messages(error.status)
 
       }).finally(()=>{
         this.spinner = false;

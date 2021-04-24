@@ -73,7 +73,7 @@ export default {
         this.user_authenticated = true;
 
       }).catch(err=>{
-        console.log(err);
+        console.log(err.error);
         this.errors.auth = 'Unauthenticated.Please sign in.';
         setTimeout(()=>{
           this.$router.push('Auth');

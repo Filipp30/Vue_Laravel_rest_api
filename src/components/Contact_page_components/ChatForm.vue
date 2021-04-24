@@ -102,11 +102,13 @@ export default {
         if (sessionStorage.getItem('chat_session')){
           this.chat_session_exist = true;
         }
+        if (this.channel_connection_status === 'connected'){
+          this.spinner = false;
+        }
 
       }).catch(err=>{
         this.show_redirect_link_if_unauthenticated = true;
         this.show_error_info = err.message;
-      }).finally(()=>{
         this.spinner = false;
       })
     },

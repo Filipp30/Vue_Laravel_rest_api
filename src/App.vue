@@ -56,15 +56,17 @@ export default {
   },
 
   mounted() {
-      if (this.channel_connection_status === 'connected')
-      this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
-      }).bind('App\\Events\\NewMessage',(data)=> {
-        console.log('new message in app listener')
-        if (parseInt(data.session) === parseInt(sessionStorage.getItem('chat_session'))
-            && data.user.name !== sessionStorage.getItem('user_name')){
-          this.show_new_message_pop_up = true;
-        }
-      });
+      if (this.channel_connection_status === 'connected'){
+        this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
+        }).bind('App\\Events\\NewMessage',(data)=> {
+          console.log('new message in app listener')
+          if (parseInt(data.session) === parseInt(sessionStorage.getItem('chat_session'))
+              && data.user.name !== sessionStorage.getItem('user_name')){
+            this.show_new_message_pop_up = true;
+          }
+        });
+      }
+
 
   },
 
