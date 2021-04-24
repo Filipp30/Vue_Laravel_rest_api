@@ -4,7 +4,7 @@ import Pusher from "pusher-js";
 
 const store = createStore({
     state:{
-        axios_request_url: "http://127.0.0.1:8000",
+        axios_request_url: "http://stuworld.space",
 
         contact_chat_channel:'',
 
@@ -19,7 +19,7 @@ const store = createStore({
                forceTLS: true,
                encrypted: true,
                cluster: "eu",
-               authEndpoint: 'http://127.0.0.1:8000/api/pusher/auth',
+               authEndpoint: 'http://stuworld.space/api/pusher/auth',
                auth: {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem('jwt_token')}`
