@@ -22,7 +22,7 @@ const store = createStore({
                authEndpoint: 'http://127.0.0.1:8000/api/pusher/auth',
                auth: {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('jwt_token')}`
+                        Authorization: `Bearer ${sessionStorage.getItem('jwt_token')}`
                     }
                },
            }).subscribe('private-my-channel');

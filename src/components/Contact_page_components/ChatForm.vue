@@ -123,18 +123,15 @@ export default {
           this.spinner = false;
         }
         }).catch(error=>{
+          this.spinner = false;
           this.show_error_info = error.message;
-        }).finally(()=>{
-
-
-      })
+        });
     },
 
     check_pusher_connection(){
       if (this.channel_connection_status === 'connected'){
         this.user_is_authenticated = true;
         this.spinner = false;
-        console.log('connected from chatForm')
       }else{
         this.show_error_info = 'making connection please wait ...'
         this.$store.dispatch('set_channel');
