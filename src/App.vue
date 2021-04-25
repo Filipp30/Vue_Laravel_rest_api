@@ -55,7 +55,7 @@ export default {
     }
   },
 
-  beforeMount() {
+  mounted() {
       if (this.channel_connection_status === 'connected'){
         this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
         }).bind('App\\Events\\NewMessage',(data)=> {
