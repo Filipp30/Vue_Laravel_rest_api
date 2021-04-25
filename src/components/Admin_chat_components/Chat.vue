@@ -75,6 +75,21 @@ export default {
     ...mapState(['contact_chat_channel','channel_connection_status']),
   },
 
+  watch:{
+    'form.input_message': function(){
+      this.contact_chat_channel.trigger('client-user_typing',{name:this.user.name,session:this.form.chat_session});
+    },
+
+    channel_connection_status(){
+      if (this.channel_connection_status === 'connected'){
+        this.pusher_connected = true;
+      }else{
+        this.pusher_connected = false;
+      }
+    }
+
+  },
+
   mounted() {
 
     if (!sessionStorage.getItem('jwt_token')){
@@ -83,7 +98,7 @@ export default {
 
     this.get_pusher_connection();
 
-    if (this.pusher_connected){
+    if (this.channel_connection_status === 'connected'){
       Pusher.logToConsole = false;
       this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=>{
@@ -175,22 +190,6 @@ export default {
     }
 
   },
-
-  watch:{
-    'form.input_message': function(){
-      this.contact_chat_channel.trigger('client-user_typing',{name:this.user.name,session:this.form.chat_session});
-    },
-
-    channel_connection_status(){
-      if (this.channel_connection_status === 'connected'){
-        this.pusher_connected = true;
-      }else{
-        this.pusher_connected = false;
-      }
-    }
-
-  },
-
 
 }
 </script>
