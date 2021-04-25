@@ -56,7 +56,7 @@ export default {
       }
     }
   },
-  beforeMount() {
+  mounted() {
     this.spinner = true;
     this.get_user_authentication();
   },
@@ -77,7 +77,7 @@ export default {
         this.errors.auth = 'Unauthenticated.Please sign in.';
         setTimeout(()=>{
           this.$router.push('Auth');
-        },2000);
+        },1500);
 
       }).finally(()=>{
         this.spinner = false;

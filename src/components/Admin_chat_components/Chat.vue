@@ -99,9 +99,11 @@ export default {
     this.get_pusher_connection();
 
     if (this.channel_connection_status === 'connected'){
+      console.log('Admin-Chat is connected')
       Pusher.logToConsole = false;
       this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=>{
+        console.log('Admin-Chat new message')
         if (parseInt(data.session) === parseInt(this.form.chat_session)){
           this.addChatMessageFromEventListenerToLocalArray(data);
         }
