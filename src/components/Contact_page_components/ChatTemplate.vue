@@ -64,22 +64,29 @@ export default {
       ...mapState(['contact_chat_channel','channel_connection_status']),
     },
 
+    watch:{
+      'form.input_message': function(){
+        this.contact_chat_channel.trigger('client-user_typing',{name:this.user,session:this.form.chat_session});
+      },
+    },
+
     mounted() {
       this.get_all_session_chat_messages();
 
-      if (this.channel_connection_status === 'connected')
-      Pusher.logToConsole = false;
-      this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
-      }).bind('App\\Events\\NewMessage',(data)=>{
-        if (parseInt(data.session) === parseInt(this.form.chat_session)){
-          this.addChatMessageFromEventListenerToLocalArray(data);
-        }
-      }).bind('client-user_typing',(data)=>{
-        if (data.session === parseInt(this.form.chat_session)){
-          this.name_typing = data.name+' typing...';
-          this.reset_show_typing_event();
-        }
-      });
+      if (this.channel_connection_status === 'connected') {
+        Pusher.logToConsole = false;
+        this.contact_chat_channel.bind('pusher:subscription_succeeded', function () {
+        }).bind('App\\Events\\NewMessage', (data) => {
+          if (parseInt(data.session) === parseInt(this.form.chat_session)) {
+            this.addChatMessageFromEventListenerToLocalArray(data);
+          }
+        }).bind('client-user_typing', (data) => {
+          if (data.session === parseInt(this.form.chat_session)) {
+            this.name_typing = data.name + ' typing...';
+            this.reset_show_typing_event();
+          }
+        });
+      }
     },
 
     methods:{
@@ -150,13 +157,7 @@ export default {
         this.messages = [{created_at:'--->',user:{name:'Admin:Filipp.G-(filipp-tts@outlook.com)'},
         message:error_message}];
       }
-    },
-
-    watch:{
-      'form.input_message': function(){
-        this.contact_chat_channel.trigger('client-user_typing',{name:this.user,session:this.form.chat_session});
-      },
-    },
+    }
 
 }
 </script>

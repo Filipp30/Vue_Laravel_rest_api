@@ -83,22 +83,20 @@ export default {
     channel_connection_status(){
       if (this.channel_connection_status === 'connected'){
         this.pusher_connected = true;
+        this.chat_event_listener();
       }else{
         this.pusher_connected = false;
       }
     }
-
   },
 
-  mounted() {
-
-    if (!sessionStorage.getItem('jwt_token')){
-      this.$router.push('Auth');
-    }
-
+  beforeMount() {
     this.get_pusher_connection();
+  },
 
-    if (this.channel_connection_status === 'connected'){
+  methods:{
+
+    chat_event_listener(){
       console.log('Admin-Chat is connected')
       Pusher.logToConsole = false;
       this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
@@ -113,11 +111,7 @@ export default {
           this.reset_show_typing_event();
         }
       });
-    }
-
-  },
-
-  methods:{
+    },
 
     get_pusher_connection(){
       if (this.channel_connection_status !=='connected'){

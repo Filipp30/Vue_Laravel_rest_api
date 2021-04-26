@@ -8,10 +8,13 @@
       <ChatTemplate/>
     </div>
 
-    <div v-if="show_new_message_pop_up" class="pop_up_new_message">
-      <button v-on:click="on_pop_up_x_pressed" class="exit_pop_up">X</button>
-      <PopUp_NewMessage v-on:click="show_chat_template = !show_chat_template"/>
-    </div>
+    <keep-alive>
+      <div v-if="show_new_message_pop_up" class="pop_up_new_message">
+        <button v-on:click="on_pop_up_x_pressed" class="exit_pop_up">X</button>
+        <PopUp_NewMessage v-on:click="show_chat_template = !show_chat_template"/>
+      </div>
+    </keep-alive>
+
 
   </div>
 </template>
@@ -41,7 +44,7 @@ export default {
     }
   },
 
-  computed: {
+  computed:{
     ...mapState(['contact_chat_channel','channel_connection_status']),
     ...mapGetters(['exitChat']),
   },
@@ -51,33 +54,30 @@ export default {
       this.on_pop_up_x_pressed();
     },
     channel_connection_status(){
-      console.log('App.vue -->pusher connection is :'+this.channel_connection_status)
+      if (this.channel_connection_status === 'connected') {
+        this.global_chat_event_listener();
+      }
     }
   },
 
-  mounted() {
-      if (this.channel_connection_status === 'connected'){
-        console.log('App vue mounted inside connected')
-        this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
-        }).bind('App\\Events\\NewMessage',(data)=> {
-          console.log('App.vue new message in app listener')
-          if (parseInt(data.session) === parseInt(sessionStorage.getItem('chat_session'))
-              && data.user.name !== sessionStorage.getItem('user_name')){
-            this.show_new_message_pop_up = true;
-          }
-        });
-      }
-
-
-  },
 
   methods:{
+
+    global_chat_event_listener(){
+      this.contact_chat_channel.bind('pusher:subscription_succeeded', function () {
+      }).bind('App\\Events\\NewMessage', (data) => {
+        if (parseInt(data.session) === parseInt(sessionStorage.getItem('chat_session'))
+            && data.user.name !== sessionStorage.getItem('user_name')) {
+          this.show_new_message_pop_up = true;
+        }
+      });
+    },
+
     on_pop_up_x_pressed(){
       this.show_new_message_pop_up = false;
       this.show_chat_template = false;
     },
   },
-
 
 
 }
