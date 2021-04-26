@@ -96,25 +96,19 @@ export default {
     border-bottom-left-radius: 50px;
     border-bottom-right-radius: 10px;
     overflow-y: scroll;
+    scroll-padding-right: 20px;
+    scroll-margin-right: 20px;
+    scroll-margin: 20px;
 
     &__item{
       margin:10px auto;
-
     }
-
   }
 
   @include scrollbar('.list');
 
   .list::-webkit-scrollbar-track{
-    margin-top: 100px;
-    scroll-padding-left: 20px;
-
+    margin-top: 135px;
   }
-  .list::-webkit-scrollbar{
-
-  }
-
-
 
 </style>
