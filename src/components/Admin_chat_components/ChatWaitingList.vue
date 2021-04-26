@@ -48,7 +48,6 @@ export default {
         this.remove_session_from_local_wait_list(data)
       });
     }
-
   },
 
   methods:{
