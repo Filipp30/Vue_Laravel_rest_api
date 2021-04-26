@@ -20,5 +20,8 @@ export default {
       background-size: contain;
       box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
     }
+    .img:hover{
+      box-shadow: 0px 0px 6px 2px rgba(0,0,0,1);
+    }
   }
 </style>
