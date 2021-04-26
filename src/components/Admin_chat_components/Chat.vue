@@ -97,11 +97,9 @@ export default {
   methods:{
 
     chat_event_listener(){
-      console.log('Admin-Chat is connected')
       Pusher.logToConsole = false;
       this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=>{
-        console.log('Admin-Chat new message')
         if (parseInt(data.session) === parseInt(this.form.chat_session)){
           this.addChatMessageFromEventListenerToLocalArray(data);
         }
