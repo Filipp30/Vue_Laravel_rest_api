@@ -163,6 +163,7 @@ export default {
 
     addChatMessageFromEventListenerToLocalArray(data){
       this.messages.push(data);
+      this.chat_history_scroll_to_bottom();
     },
 
     remove_this_chat_session(){

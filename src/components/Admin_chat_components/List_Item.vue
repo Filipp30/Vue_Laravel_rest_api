@@ -51,7 +51,7 @@ export default {
       Pusher.logToConsole =false;
       this.contact_chat_channel.bind('pusher:subscription_succeeded', function() {
       }).bind('App\\Events\\NewMessage',(data)=>{
-        if (parseInt(data.session) === this.item.session){
+        if ((parseInt(data.session) === parseInt(this.item.session)) && data.user.name !== sessionStorage.getItem('user_name')){
           this.show_new_message_exist = true;
         }
       }).bind('client-user_typing',data=>{
