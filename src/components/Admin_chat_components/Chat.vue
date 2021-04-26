@@ -2,7 +2,7 @@
   <section class="chat">
 
       <div class="chat__list">
-        <Spinner_2 v-if="pusher_connected = false" />
+        <Spinner_2 v-if="pusher_connected !==true" />
         <ChatWaitingList v-if="pusher_connected"  v-on:on_chat_session_clicked="on_chat_session_clicked"/>
       </div>
 
@@ -95,19 +95,17 @@ export default {
     }
   },
 
-  beforeMount() {
+  mounted() {
     this.get_pusher_connection();
   },
 
   methods:{
     get_pusher_connection(){
-      console.log('get_pusher_connection')
       if (this.channel_connection_status !=='connected'){
         this.pusher_connected = false;
         this.$store.dispatch('set_channel');
       }else if (this.channel_connection_status === 'connected'){
         this.pusher_connected = true;
-        console.log('connected')
       }
     },
 
@@ -133,7 +131,7 @@ export default {
           {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`},
             params:{chat_session:session}
           }).then(response=>{
-        this.messages = response.data;
+          this.messages = response.data;
 
       }).catch(error=>{
         this.use_chat_area_for_show_error_messages(error.status)
@@ -149,12 +147,12 @@ export default {
           this.form, {
             headers: {"Authorization": `Bearer ${sessionStorage.getItem('jwt_token')}`}
           }).then((response) => {
-        this.form.input_message = '';
-        this.information_status_field_chat_template = response.data.message;
+          this.form.input_message = '';
+          this.information_status_field_chat_template = response.data.message;
       }).catch((error) => {
-        this.information_status_field_chat_template = error;
+          this.information_status_field_chat_template = error;
       }).finally(() => {
-        setTimeout(() => {
+          setTimeout(() => {
           this.information_status_field_chat_template = '';
         }, 1500)
       })
@@ -165,27 +163,27 @@ export default {
     },
 
     remove_this_chat_session(){
-        if (!this.form.chat_session){
-          this.use_chat_area_for_show_error_messages('Select first a session');
-          return;
-        }
-        this.spinner = true;
-        axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
-            {chat_session:this.form.chat_session},
-            {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`}
-            }).then(()=>{
+      if (!this.form.chat_session){
+        this.use_chat_area_for_show_error_messages('Select first a session');
+        return;
+      }
+      this.spinner = true;
+      axios.post(this.$store.state.axios_request_url+'/api/chat/remove_chat_session',
+          {chat_session:this.form.chat_session},
+          {headers:{"Authorization" : `Bearer ${sessionStorage.getItem('jwt_token')}`}
+          }).then(()=>{
           this.use_chat_area_for_show_error_messages('Chat Session: '+this.form.chat_session+' was removed.');
           this.form.chat_session = '';
-        }).catch((error)=>{
+      }).catch((error)=>{
           this.use_chat_area_for_show_error_messages(error);
-        }).finally(()=>{
+      }).finally(()=>{
           this.spinner = false;
-        });
+      });
     },
 
     use_chat_area_for_show_error_messages(error_message){
-      this.messages = '';
-      this.messages = [{created_at:'--->',user:{name:'Error : '},
+        this.messages = '';
+        this.messages = [{created_at:'--->',user:{name:'Error : '},
         message:error_message}];
     }
 

@@ -8,13 +8,10 @@
       <ChatTemplate/>
     </div>
 
-    <keep-alive>
-      <div v-if="show_new_message_pop_up" class="pop_up_new_message">
-        <button v-on:click="on_pop_up_x_pressed" class="exit_pop_up">X</button>
-        <PopUp_NewMessage v-on:click="show_chat_template = !show_chat_template"/>
-      </div>
-    </keep-alive>
-
+    <div v-if="show_new_message_pop_up" class="pop_up_new_message">
+      <button v-on:click="on_pop_up_x_pressed" class="exit_pop_up">X</button>
+      <PopUp_NewMessage v-on:click="show_chat_template = !show_chat_template"/>
+    </div>
 
   </div>
 </template>

@@ -1,9 +1,12 @@
 <template>
   <section class="list">
+
     <Spinner_2 v-if="spinner" />
+
     <div  v-for="item in chat_session_list" v-bind:key="item.id" class="list__item">
         <List_Item  v-bind:item="item" v-on:click="$emit('on_chat_session_clicked',item.session)"/>
     </div>
+
   </section>
 </template>
 
@@ -35,8 +38,8 @@ export default {
   beforeMount() {
     this.get_chat_session_waiting_list();
   },
-  mounted() {
 
+  mounted() {
     if (this.channel_connection_status === 'connected'){
       this.contact_chat_channel.bind('App\\Events\\NewChatSessionCreated',data=>{
         this.add_session_to_local_wait_list(data);
@@ -83,7 +86,7 @@ export default {
 <style lang="scss" scoped>
   .list{
     border: 1px solid red;
-    width: 350px;
+    width: 400px;
     height: 500px;
     display: flex;
     flex-direction: column;
@@ -94,8 +97,6 @@ export default {
     &__item{
 
     }
-
-
   }
 
 

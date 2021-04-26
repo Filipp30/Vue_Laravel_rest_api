@@ -3,10 +3,10 @@
 
     <header class="item__userInformation">
       <ul>
-        <li>session: {{item.session}}</li>
-        <li>created_at: {{item.created_at}}</li>
-        <li>username: {{item.user.name}}</li>
-        <li>email:{{item.user.email}}</li>
+        <li>session: <span>{{item.session}}</span></li>
+        <li>created_at: <span>{{item.created_at}}</span></li>
+        <li>username: <span>{{item.user.name}}</span></li>
+        <li>email: <span>{{item.user.email}}</span></li>
       </ul>
     </header>
 
@@ -78,22 +78,36 @@ export default {
   .item{
     background-color: #dddddd;
     width:350px;
+    height: 140px;
+    border: 2px solid gray ;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 50px;
 
     &__userInformation{
       font-size:17px;
       font-weight: bold;
       line-height: 25px;
+
+      ul{
+        li{
+          span{
+            color: #6b6060;
+          }
+        }
+      }
     }
 
     &__listener{
-      background-color: darkgray;
+      width: 300px;
+      height: 25px;
+      margin:5px auto;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
 
       div{
         background-color: aliceblue;
         border-radius: 5px;
-        width: 100px;
+        width: 120px;
         height: 25px;
         font-size:17px;
         font-weight: bold;
@@ -101,7 +115,6 @@ export default {
         justify-content: center;
         align-content: center;
       }
-
     }
   }
 </style>
