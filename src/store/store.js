@@ -1,14 +1,15 @@
 import { createStore } from "vuex"
 import chat from "./modules/chat";
 import Pusher from "pusher-js";
-
 const store = createStore({
     state:{
         axios_request_url: "http://stuworld.space",
 
         contact_chat_channel:'',
 
-        channel_connection_status:''
+        channel_connection_status:'',
+
+        new_message_active:false
 
     },
     actions:{
@@ -28,6 +29,11 @@ const store = createStore({
            }).subscribe('private-my-channel');
            channel.bind('pusher:subscription_succeeded', ()=>{
                txc.commit('set_channel',channel);
+           }).bind('App\\Events\\NewMessage', (data) => {
+               if (parseInt(data.session) === parseInt(sessionStorage.getItem('chat_session'))
+                   && data.user.name !== sessionStorage.getItem('user_name')){
+                    txc.commit('new_message_active_trigger_popup');
+               }
            });
         }
 
@@ -38,13 +44,18 @@ const store = createStore({
         set_channel(state,channel){
             state.contact_chat_channel = channel;
             state.channel_connection_status = channel.pusher.connection.state;
+        },
+
+        new_message_active_trigger_popup(state){
+            state.new_message_active = !state.new_message_active;
         }
     },
 
     modules:{
-        chat,
+        chat
     }
 
 })
+
 
 export default store

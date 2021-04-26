@@ -9,7 +9,7 @@
 
     <Spinner v-if="spinner"/>
 
-    <section class="messages">
+    <section class="messages" id="messages">
       <div  v-for="item in messages" v-bind:key="item.id" >
         <p>{{item.created_at}} - {{item.user.name}} :</p>
         <p>{{item.message}}</p>
@@ -68,6 +68,10 @@ export default {
       'form.input_message': function(){
         this.contact_chat_channel.trigger('client-user_typing',{name:this.user,session:this.form.chat_session});
       },
+
+      messages(){
+        this.chat_history_scroll_to_bottom();
+      }
     },
 
     mounted() {
@@ -102,7 +106,8 @@ export default {
           this.use_chat_area_for_show_error_messages(error.response.data.message);
           sessionStorage.removeItem('chat_session');
         }).finally(()=>{
-          this.spinner = false
+          this.spinner = false;
+          this.chat_history_scroll_to_bottom();
         })
       },
 
@@ -125,6 +130,7 @@ export default {
           setTimeout(()=>{
             this.information_status_field_chat_template = '';
           },1500)
+          this.chat_history_scroll_to_bottom();
         })
       },
 
@@ -156,6 +162,11 @@ export default {
         this.messages = '';
         this.messages = [{created_at:'--->',user:{name:'Admin:Filipp.G-(filipp-tts@outlook.com)'},
         message:error_message}];
+      },
+
+      chat_history_scroll_to_bottom(){
+        let chatHistory = document.getElementById("messages");
+        chatHistory.scrollTop = chatHistory.scrollHeight;
       }
     }
 

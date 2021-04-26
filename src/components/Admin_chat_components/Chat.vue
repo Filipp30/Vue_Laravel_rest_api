@@ -15,7 +15,7 @@
 
         <Spinner v-if="spinner"/>
 
-        <section class="messages">
+        <section class="messages" id="messages">
           <div  v-for="item in messages" v-bind:key="item.id" >
             <p>{{item.created_at}} - {{item.user.name}} :</p>
             <p>{{item.message}}</p>
@@ -92,6 +92,10 @@ export default {
         this.pusher_connected = false;
         this.get_pusher_connection();
       }
+    },
+
+    messages(){
+      this.chat_history_scroll_to_bottom();
     }
   },
 
@@ -132,12 +136,12 @@ export default {
             params:{chat_session:session}
           }).then(response=>{
           this.messages = response.data;
-
       }).catch(error=>{
         this.use_chat_area_for_show_error_messages(error.status)
 
       }).finally(()=>{
         this.spinner = false;
+        this.chat_history_scroll_to_bottom();
       })
     },
 
@@ -185,6 +189,11 @@ export default {
         this.messages = '';
         this.messages = [{created_at:'--->',user:{name:'Error : '},
         message:error_message}];
+    },
+
+    chat_history_scroll_to_bottom(){
+      let chatHistory = document.getElementById("messages");
+      chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
   },

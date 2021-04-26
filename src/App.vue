@@ -42,7 +42,7 @@ export default {
   },
 
   computed:{
-    ...mapState(['contact_chat_channel','channel_connection_status']),
+    ...mapState(['new_message_active','contact_chat_channel']),
     ...mapGetters(['exitChat']),
   },
 
@@ -50,26 +50,22 @@ export default {
     exitChat(){
       this.on_pop_up_x_pressed();
     },
-    channel_connection_status(){
-      if (this.channel_connection_status === 'connected') {
-        this.global_chat_event_listener();
-      }
+
+    new_message_active(){
+      this.show_new_message_pop_up = true;
     }
   },
 
+  created() {
+    if (sessionStorage.getItem('jwt_token') &&
+        sessionStorage.getItem('user_name') &&
+        sessionStorage.getItem('chat_session')&&
+        this.contact_chat_channel === ''){
+        this.$store.dispatch('set_channel');
+    }
+  },
 
   methods:{
-
-    global_chat_event_listener(){
-      this.contact_chat_channel.bind('pusher:subscription_succeeded', function () {
-      }).bind('App\\Events\\NewMessage', (data) => {
-        if (parseInt(data.session) === parseInt(sessionStorage.getItem('chat_session'))
-            && data.user.name !== sessionStorage.getItem('user_name')) {
-          this.show_new_message_pop_up = true;
-        }
-      });
-    },
-
     on_pop_up_x_pressed(){
       this.show_new_message_pop_up = false;
       this.show_chat_template = false;
