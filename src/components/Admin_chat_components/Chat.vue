@@ -43,7 +43,7 @@ import Spinner from "../Spinner";
 import Spinner_2 from "../Spinner_2";
 import axios from "axios";
 import Pusher from "pusher-js";
-import {mapState} from "vuex";
+import {mapGetters, mapState} from "vuex";
 
 export default {
   name: "Chat",
@@ -76,6 +76,7 @@ export default {
 
   computed:{
     ...mapState(['contact_chat_channel','channel_connection_status']),
+    ...mapGetters(['get_chat_private_channel'])
   },
 
   watch:{
@@ -84,34 +85,32 @@ export default {
       this.contact_chat_channel.trigger('client-user_typing',{name:this.user.name,session:this.form.chat_session});
     },
 
+    messages(){
+      this.chat_history_scroll_to_bottom();
+    },
+
     channel_connection_status(){
-      if (this.channel_connection_status === 'connected'){
+      if (this.get_chat_private_channel !== false){
         this.pusher_connected = true;
         this.chat_event_listener();
       }else{
-        this.pusher_connected = false;
-        this.get_pusher_connection();
+        this.$store.dispatch('set_channel');
       }
-    },
-
-    messages(){
-      this.chat_history_scroll_to_bottom();
     }
   },
 
-  mounted() {
-    this.get_pusher_connection();
+  created() {
+    if (sessionStorage.getItem('jwt_token') &&
+        sessionStorage.getItem('user_name') &&
+        this.get_chat_private_channel === false){
+        this.$store.dispatch('set_channel');
+    }else{
+        this.pusher_connected = true;
+        this.chat_event_listener();
+    }
   },
 
   methods:{
-    get_pusher_connection(){
-      if (this.channel_connection_status !=='connected'){
-        this.pusher_connected = false;
-        this.$store.dispatch('set_channel');
-      }else if (this.channel_connection_status === 'connected'){
-        this.pusher_connected = true;
-      }
-    },
 
     chat_event_listener(){
       Pusher.logToConsole = false;

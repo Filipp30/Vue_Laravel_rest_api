@@ -51,6 +51,16 @@ const store = createStore({
         }
     },
 
+    getters:{
+        get_chat_private_channel(state){
+            if (state.contact_chat_channel === ''){
+                return false;
+            }else{
+                return state.contact_chat_channel;
+            }
+        }
+    },
+
     modules:{
         chat
     }
