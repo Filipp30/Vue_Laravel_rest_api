@@ -2,6 +2,7 @@
   <section class="chat">
 
       <div class="chat__list">
+        <Spinner_2 v-if="pusher_connected = false" />
         <ChatWaitingList v-if="pusher_connected"  v-on:on_chat_session_clicked="on_chat_session_clicked"/>
       </div>
 
@@ -39,6 +40,7 @@
 import ChatWaitingList from "./ChatWaitingList";
 import {debounce} from "lodash";
 import Spinner from "../Spinner";
+import Spinner_2 from "../Spinner_2";
 import axios from "axios";
 import Pusher from "pusher-js";
 import {mapState} from "vuex";
@@ -49,6 +51,7 @@ export default {
   props:['user'],
 
   components:{
+    Spinner_2,
     ChatWaitingList,
     Spinner,
   },
@@ -57,17 +60,17 @@ export default {
     return{
       messages:[],
       name_typing:'',
+      information_status_field_chat_template:'',
+
       reset_show_typing_event:debounce(function () {this.name_typing =''}, 1300),
       spinner:false,
-      information_status_field_chat_template:'',
+      pusher_connected:false,
 
       form:{
         input_message:'',
         name: '',
         chat_session:''
       },
-
-      pusher_connected:false
     }
   },
 
@@ -76,6 +79,7 @@ export default {
   },
 
   watch:{
+
     'form.input_message': function(){
       this.contact_chat_channel.trigger('client-user_typing',{name:this.user.name,session:this.form.chat_session});
     },
@@ -86,6 +90,7 @@ export default {
         this.chat_event_listener();
       }else{
         this.pusher_connected = false;
+        this.get_pusher_connection();
       }
     }
   },
@@ -95,6 +100,16 @@ export default {
   },
 
   methods:{
+    get_pusher_connection(){
+      console.log('get_pusher_connection')
+      if (this.channel_connection_status !=='connected'){
+        this.pusher_connected = false;
+        this.$store.dispatch('set_channel');
+      }else if (this.channel_connection_status === 'connected'){
+        this.pusher_connected = true;
+        console.log('connected')
+      }
+    },
 
     chat_event_listener(){
       Pusher.logToConsole = false;
@@ -109,15 +124,6 @@ export default {
           this.reset_show_typing_event();
         }
       });
-    },
-
-    get_pusher_connection(){
-      if (this.channel_connection_status !=='connected'){
-        this.pusher_connected = false;
-        this.$store.dispatch('set_channel');
-      }else if (this.channel_connection_status === 'connected'){
-        this.pusher_connected = true;
-      }
     },
 
     on_chat_session_clicked(session){
@@ -184,7 +190,6 @@ export default {
     }
 
   },
-
 }
 </script>
 
