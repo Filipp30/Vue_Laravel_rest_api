@@ -164,6 +164,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../assets/styles/_app.sass";
+@import "../../assets/styles/_scrollbar.scss";
 .chat_template{
     box-shadow: 0px 1px 18px -3px rgba(0,0,0,0.75);
     height: 500px;
@@ -199,10 +200,12 @@ export default {
       }
     }
     .messages{
-        height: 400px;
-        overflow-y: auto;
-        padding: 1px 10px;
+      height: 400px;
+      overflow-y: scroll;
+      padding: 1px 10px;
+
     }
+    @include scrollbar('.messages');
 
     .inp_form {
         border-top: 1px solid #1a202c;

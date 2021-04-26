@@ -11,11 +11,11 @@
     </header>
 
     <footer class="item__listener">
-        <div class="new_message_active">
+        <div class="new_message_active" v-bind:class="{'new_message_style': show_new_message_exist}">
           <p v-if="show_new_message_exist">new message</p>
         </div>
 
-        <div class="typing_active">
+        <div class="typing_active" v-bind:class="{'typing_active_style': show_typing_active}">
           <p v-if="show_typing_active">typing...</p>
         </div>
     </footer>
@@ -106,7 +106,6 @@ export default {
 
       div{
         background-color: aliceblue;
-        border-radius: 5px;
         width: 120px;
         height: 25px;
         font-size:17px;
@@ -114,7 +113,19 @@ export default {
         display: flex;
         justify-content: center;
         align-content: center;
+        border-top-right-radius: 150px;
+        border-bottom-left-radius: 150px;
+      }
+      .new_message_style{
+        box-shadow: 0px 1px 18px -3px red;
+      }
+      .typing_active_style{
+        box-shadow: 0px 1px 18px -3px blue;
       }
     }
+  }
+
+  .item:hover{
+    box-shadow: 0px 1px 18px -3px gray;
   }
 </style>

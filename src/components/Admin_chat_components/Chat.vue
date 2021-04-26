@@ -193,7 +193,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../assets/styles/_app.sass";
-
+@import "../../assets/styles/_scrollbar";
   .chat{
     margin: auto;
     width: 700px;
@@ -242,15 +242,7 @@ export default {
         overflow-y: scroll;
         padding: 1px 10px;
       }
-      //.messages::-webkit-scrollbar {
-      //    width: 6px;
-      //}
-      //.messages::-webkit-scrollbar-track {
-      //    background: #ddd;
-      //}
-      //.messages::-webkit-scrollbar-thumb {
-      //    background: #bdbdbd;
-      //}
+      @include scrollbar('.messages');
 
       .inp_form {
         border-top: 1px solid #1a202c;

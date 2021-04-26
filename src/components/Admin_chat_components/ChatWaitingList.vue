@@ -3,7 +3,7 @@
 
     <Spinner_2 v-if="spinner" />
 
-    <div  v-for="item in chat_session_list" v-bind:key="item.id" class="list__item">
+    <div  v-for="item in chat_session_list" v-bind:key="item.id" class="list__item" >
         <List_Item  v-bind:item="item" v-on:click="$emit('on_chat_session_clicked',item.session)"/>
     </div>
 
@@ -84,20 +84,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/styles/scrollbar";
   .list{
-    border: 1px solid red;
-    width: 400px;
+    width: 380px;
     height: 500px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
+
+    box-shadow: 0px 1px 18px -3px rgba(0,0,0,0.75);
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 10px;
     overflow-y: scroll;
 
     &__item{
+      margin:10px auto;
 
     }
+
   }
+
+  @include scrollbar('.list');
+
+  .list::-webkit-scrollbar-track{
+    margin-top: 100px;
+    scroll-padding-left: 20px;
+
+  }
+  .list::-webkit-scrollbar{
+
+  }
+
 
 
 </style>
