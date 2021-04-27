@@ -101,7 +101,6 @@ export default {
 
   created() {
     if (sessionStorage.getItem('jwt_token') &&
-        sessionStorage.getItem('user_name') &&
         this.get_chat_private_channel === false){
         this.$store.dispatch('set_channel');
     }else{

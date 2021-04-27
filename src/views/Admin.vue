@@ -65,6 +65,7 @@ export default {
           this.$router.push('my_account');
         }
         this.user = response.data;
+        sessionStorage.setItem('user_name',response.data.name)
         this.user_authenticated = true;
 
       }).catch(err=>{
