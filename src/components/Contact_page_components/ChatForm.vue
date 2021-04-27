@@ -21,7 +21,7 @@
         <div v-if="show_redirect_link_if_unauthenticated" class="unauthenticated">
             <p>You are unauthenticated ! Pleas first log in...</p>
             <p>{{show_error_info}}</p>
-            <RouterLink to="/auth">Go to Auth page</RouterLink>
+            <RouterLink to="/auth" >Go to Auth page</RouterLink>
         </div>
 
         <Spinner v-if="spinner"/>
@@ -148,7 +148,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../assets/styles/_app.sass";
-
+@import "../../assets/styles/_button.scss";
 @mixin a_link{
   a{
     text-decoration: none;
@@ -182,10 +182,21 @@ export default {
      margin-top: 20px;
       .chat_connect{
           @include a_link;
+
+          @include btn(200px);
+          button{
+            margin-top: 50px;
+          }
       }
     }
     .unauthenticated{
       @include a_link;
+
+      p{
+        margin-bottom: 50px;
+        margin-top: 10px;
+      }
+
     }
   }
 }

@@ -99,6 +99,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../assets/styles/_app.sass";
+@import "../../assets/styles/_button";
   .email{
 
     &__title{
@@ -166,25 +167,11 @@ export default {
       }
       &__btn{
         height: 100px;
+        @include btn(150px);
         button{
             margin-top: 10px;
-            border:none;
-            outline: none;
-            width: 150px;
-            border-radius: 2px;
-            background-color:gray;
-            color:white;
-            font-size: 20px;
         }
-        button:hover{
-            width: 150px;
-            border-radius: 2px;
-            font-size: 20px;
-            cursor: pointer;
-            background-color: transparent;
-            outline: 1px solid black;
-            color: black;
-        }
+
         .spinner_error{
             height:80px;
           .request_response_field{

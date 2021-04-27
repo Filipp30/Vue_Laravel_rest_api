@@ -82,6 +82,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../assets/styles/_app.sass";
+@import "../../assets/styles/_button.scss";
   .forgot_form{
     margin: auto;
     width: 300px;
@@ -129,22 +130,7 @@ export default {
       justify-content: space-between;
       align-items: center;
 
-      button{
-        border:none;
-        outline: none;
-        width: 120px;
-        border-radius: 2px;
-        background-color:gray;
-        color:white;
-        font-size: 20px;
-      }
-      button:hover{
-        cursor: pointer;
-        background-color: transparent;
-        border-radius: 2px;
-        border: 1px solid black;
-        color: black;
-      }
+      @include btn(120px);
     }
 
     &__error{
