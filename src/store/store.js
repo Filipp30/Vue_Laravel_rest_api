@@ -3,7 +3,7 @@ import chat from "./modules/chat";
 import Pusher from "pusher-js";
 const store = createStore({
     state:{
-        axios_request_url: "http://stuworld.space",
+        axios_request_url: "https://stuworld.space",
 
         contact_chat_channel:'',
 
@@ -20,7 +20,7 @@ const store = createStore({
                forceTLS: true,
                encrypted: true,
                cluster: "eu",
-               authEndpoint: 'http://stuworld.space/api/pusher/auth',
+               authEndpoint: 'https://stuworld.space/api/pusher/auth',
                auth: {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem('jwt_token')}`

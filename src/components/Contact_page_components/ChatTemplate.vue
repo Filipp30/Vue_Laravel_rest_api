@@ -152,7 +152,7 @@ export default {
             this.use_chat_area_for_show_error_messages(this.error_message_empty_chat_session);
             this.$store.dispatch('exit_chat_pressed');
           }).catch((error)=>{
-            this.use_chat_area_for_show_error_messages(error);
+            this.use_chat_area_for_show_error_messages(error.message);
           }).finally(()=>{
             this.spinner = false;
         });

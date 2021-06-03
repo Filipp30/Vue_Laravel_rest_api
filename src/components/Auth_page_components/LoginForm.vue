@@ -2,7 +2,6 @@
   <form @submit.prevent="onSignSubmit" class="login_form" autocomplete="off">
 
     <div class="login_form__inputs">
-
       <div>
           <label for="email">E-Mail</label>
           <input v-model="request_login_form.email"
@@ -18,9 +17,7 @@
                  empty_user_input_error.style_input_border_red:empty_user_input_error.style_input_border_black}"
                  type="password" placeholder="password" id="password" autocomplete="off">
       </div>
-
     </div>
-
 
     <div class="login_form__btn">
         <button>Login</button>
@@ -32,20 +29,25 @@
         <div v-if="response_from_axios_login_request">
             <h4>{{response_from_axios_login_request}}</h4>
         </div>
-    </div>
 
+      <div class="social_login">
+        <SocialLogin/>
+      </div>
+    </div>
   </form>
 </template>
 
 <script>
 import Spinner from "../Spinner";
 import axios from "axios";
+import SocialLogin from "./SocialLogin";
 
 export default {
 
   name: "SignForm",
 
   components:{
+    SocialLogin,
     Spinner
   },
 
@@ -73,7 +75,6 @@ export default {
           this.response_from_axios_login_request = 'Fields empty';
           return;
       }
-
       this.response_from_axios_login_request = '';
       this.show_spinner = true;
       axios.post(this.$store.state.axios_request_url+'/api/login', this.request_login_form
@@ -200,7 +201,13 @@ export default {
       width: 300px;
       height:100px;
       display: flex;
+      flex-direction: column;
       justify-content: center;
+    }
+    .social_login{
+      display: flex;
+      justify-content: center;
+
     }
   }
 </style>
