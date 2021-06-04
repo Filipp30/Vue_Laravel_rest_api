@@ -1,12 +1,12 @@
 <template>
   <div class="login_social">
-    <button v-on:click="fb_login" class="loginBtn loginBtn--facebook">
+    <div v-on:click="fb_login" class="loginBtn loginBtn--facebook">
       Login with Facebook
-    </button>
+    </div>
 
-    <button class="loginBtn loginBtn--google">
+    <div v-on:click="google_login" class="loginBtn loginBtn--google">
       Login with Google
-    </button>
+    </div>
   </div>
 </template>
 
@@ -29,6 +29,16 @@ export default {
       .catch(error =>{
         console.log(error)
       })
+    },
+    google_login(){
+      axios.get(this.$store.state.axios_request_url+'/api/auth/redirect/google')
+        .then(response => {
+          console.log(response)
+          window.location.href = response.data.auth;
+        })
+        .catch(error =>{
+          console.log(error)
+        })
     }
   }
 }
@@ -86,6 +96,7 @@ export default {
   .loginBtn--facebook:focus {
     background-color: #5B7BD5;
     background-image: linear-gradient(#5B7BD5, #4864B1);
+    cursor: pointer;
   }
   .loginBtn--google {
     /*font-family: "Roboto", Roboto, arial, sans-serif;*/
@@ -98,6 +109,7 @@ export default {
   .loginBtn--google:hover,
   .loginBtn--google:focus {
     background: #E74B37;
+    cursor: pointer;
   }
 }
 </style>
